@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication
 import sys
 
 platform: str = 'WINDOWS'
-version: str = '1.0add.0.0'
+version: str = '1.0.0.0'
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
