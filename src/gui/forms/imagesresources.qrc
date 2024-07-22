@@ -1,0 +1,23 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/Joystick-down.png</file>
+    <file>icons/Joystick-hover.png</file>
+    <file>icons/Joystick-lb.png</file>
+    <file>icons/Joystick-left.png</file>
+    <file>icons/Joystick-lt.png</file>
+    <file>icons/Joystick-rb.png</file>
+    <file>icons/Joystick-right.png</file>
+    <file>icons/Joystick-rt.png</file>
+    <file>icons/Joystick-up.png</file>
+    <file>icons/checkbox-checked.png</file>
+    <file>icons/checkbox-unchecked.png</file>
+    <file>icons/ShowMore.png</file>
+    <file>icons/about.png</file>
+    <file>icons/help.png</file>
+    <file>icons/Position.png</file>
+    <file>icons/reports.png</file>
+    <file>icons/Setting.png</file>
+    <file>icons/sideMenu.png</file>
+    <file>icons/Status.png</file>
+  </qresource>
+</RCC>
