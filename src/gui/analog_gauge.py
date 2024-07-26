@@ -22,9 +22,11 @@ import math
 ########################################################################
 # MODULE UPDATED TO USE QTPY
 ########################################################################
+import time
+
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import QPolygon, QPolygonF, QColor, QPen, QFont, QPainter, QFontMetrics, QConicalGradient, \
-    QRadialGradient, QFontDatabase
+    QRadialGradient, QFontDatabase, QBrush
 from PyQt5.QtCore import Qt, QTimer, QPoint, QPointF, QRect, QSize, QObject
 from PyQt5.QtCore import pyqtSignal as Signal
 
@@ -42,14 +44,20 @@ class AnalogGaugeWidget(QWidget):
 
     """
     valueChanged = Signal(int)
+    low_limit_start: int = 0
+    low_limit_len: int = 0
+    high_limit_start: int = 0
+    high_limit_len: int = 0
 
-    def __init__(self, parent=None, theme: int = 1):
+    def __init__(self, parent=None, theme: int = 1, use_limit: bool = True):
         super(AnalogGaugeWidget, self).__init__(parent)
 
         ################################################################################################
         # DEFAULT TIMER VALUE
         ################################################################################################
         self.use_timer_event = False
+
+        self.use_limit = use_limit
 
         ################################################################################################
         # DEFAULT NEEDLE COLOR
@@ -174,7 +182,7 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # ENABLE BAR GRAPH BY DEFAULT
         ################################################################################################
-        self.setEnableBarGraph(False)
+        self.setEnableBarGraph(True)
         ################################################################################################
         # FILL POLYGON COLOR BY DEFAULT
         ################################################################################################
@@ -204,7 +212,7 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # ENABLE NEEDLE MOUSE TRACKING BY DEFAULT
         ################################################################################################
-        self.setMouseTracking(True)
+        self.setMouseTracking(False)
 
         ################################################################################################
         # SET GAUGE UNITS
@@ -1080,29 +1088,63 @@ class AnalogGaugeWidget(QWidget):
             if outline_pen_with > 0:
                 painter_filled_polygon.setPen(self.pen)
 
-            colored_scale_polygon = self.create_polygon_pie(
-                ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
-                (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
-                self.scale_angle_start_value, self.scale_angle_size)
+            if not self.use_limit:
+                colored_scale_polygon = self.create_polygon_pie(
+                    ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
+                    (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
+                    self.scale_angle_start_value, self.scale_angle_size)
 
-            gauge_rect = QRect(QPoint(0, 0), QSize(int(self.widget_diameter / 2 - 1), int(self.widget_diameter - 1)))
-            grad = QConicalGradient(QPointF(0, 0), - self.scale_angle_size - self.scale_angle_start_value +
-                                    self.angle_offset - 1)
+                gauge_rect = QRect(QPoint(0, 0),
+                                   QSize(int(self.widget_diameter / 2 - 1), int(self.widget_diameter - 1)))
+                grad = QConicalGradient(QPointF(0, 0), - self.scale_angle_size - self.scale_angle_start_value +
+                                        self.angle_offset - 1)
 
-            # todo definition scale color as array here
-            for eachcolor in self.scale_polygon_colors:
-                grad.setColorAt(eachcolor[0], eachcolor[1])
-            # grad.setColorAt(.00, Qt.red)
-            # grad.setColorAt(.1, Qt.yellow)
-            # grad.setColorAt(.15, Qt.green)
-            # grad.setColorAt(1, Qt.transparent)
-            # self.brush = QBrush(QColor(255, 0, 255, 255))
-            # grad.setStyle(Qt.Dense6Pattern)
-            # painter_filled_polygon.setBrush(self.brush)
-            painter_filled_polygon.setBrush(grad)
+                # grad.drawPoints(QPointF(0, 0), - self.scale_angle_size - self.scale_angle_start_value +
+                #                         self.angle_offset - 1)
+                # todo definition scale color as array here
+                for eachcolor in self.scale_polygon_colors:
+                    grad.setColorAt(eachcolor[0], eachcolor[1])
+                grad.setColorAt(.00, Qt.GlobalColor.red)
+                grad.setColorAt(.25, Qt.GlobalColor.yellow)
+                grad.setColorAt(.75, Qt.green)
+                # grad.setColorAt(1, Qt.transparent)
+                # self.brush = QBrush(QColor(255, 0, 255, 255))
+                # grad.setStyle(Qt.Dense6Pattern)
+                # painter_filled_polygon.setBrush(self.brush)
+                painter_filled_polygon.setBrush(grad)
 
-            painter_filled_polygon.drawPolygon(colored_scale_polygon)
-            # return painter_filled_polygon
+                painter_filled_polygon.drawPolygon(colored_scale_polygon)
+                # return painter_filled_polygon
+            else:
+                low_limit_colored_scale_polygon = self.create_polygon_pie(
+                    ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
+                    (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
+                    self.low_limit_start, self.low_limit_len)
+                high_limit_colored_scale_polygon = self.create_polygon_pie(
+                    ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
+                    (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
+                    self.high_limit_start, self.high_limit_len)
+                colored_scale_polygon = self.create_polygon_pie(
+                    ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
+                    (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
+                    self.low_limit_start + self.low_limit_len, self.high_limit_start - (self.low_limit_start + self.low_limit_len))
+
+                # grad.drawPoints(QPointF(0, 0), - self.scale_angle_size - self.scale_angle_start_value +
+                #                         self.angle_offset - 1)
+                # todo definition scale color as array here
+
+                # grad.setColorAt(.00, Qt.GlobalColor.red)
+                # grad.setColorAt(.99, Qt.GlobalColor.green)
+                # grad.setColorAt(1, Qt.red)
+                # grad.setColorAt(1, Qt.transparent)
+                # self.brush = QBrush(QColor(255, 0, 255, 255))
+                # grad.setStyle(Qt.Dense6Pattern)
+                painter_filled_polygon.setBrush(Qt.red)
+                painter_filled_polygon.drawPolygon(low_limit_colored_scale_polygon)
+                painter_filled_polygon.drawPolygon(high_limit_colored_scale_polygon)
+                painter_filled_polygon.setBrush(Qt.green)
+                painter_filled_polygon.drawPolygon(colored_scale_polygon)
+                # return painter_filled_polygon
 
     def draw_icon_image(self):
         pass
@@ -1220,7 +1262,7 @@ class AnalogGaugeWidget(QWidget):
 
         # angle_distance = (float(self.scale_angle_size) / float(self.scalaCount))
         # for i in range(self.scalaCount + 1):
-        text = str(int(self.value))
+        text = str(round(self.value, 2))
         w = fm.width(text) + 1
         h = fm.height()
         painter.setFont(QFont(self.value_fontname, int(self.value_fontsize), QFont.Bold))
@@ -1479,28 +1521,49 @@ class AnalogGaugeWidget(QWidget):
 # END ==>
 ################################################################################################
 
+def valuchanged():
+    gauge.low_limit_len = slider.value() - 135
+    gauge.updateValue(gauge.value + 0.03)
+    gauge.update()
+    print('Low limit is', gauge.low_limit_len)
+
+
 if __name__ == '__main__':
     from PyQt5.QtWidgets import QApplication
     from PyQt5 import QtWidgets
     import sys
 
     app = QApplication([])
-    widget = QtWidgets.QScrollArea()
-    wsc = QtWidgets.QWidget()
-    layout = QtWidgets.QGridLayout(widget)
+    frame = QtWidgets.QFrame()
+    layout = QtWidgets.QVBoxLayout(frame)
     cnt = 0
     minValue = -180
     maxValue = 180
-    size = (minValue + maxValue) if (minValue * maxValue) >= 0 else max((minValue,  maxValue)) + (min((minValue, maxValue)) * -1)
-    for i in range(1):
-        for j in range(1):
-            gauge = AnalogGaugeWidget(theme=24)
-            # gauge.value = 500
-            layout.addWidget(gauge, i, j)
-            gauge.minValue = minValue
-            gauge.maxValue = maxValue
-            gauge.scale_angle_size = size if size <= 270 else 270
-            cnt += 1
-    widget.setWidget(wsc)
-    widget.show()
+    size = (minValue + maxValue) if (minValue * maxValue) >= 0 else max((minValue, maxValue)) + (
+                min((minValue, maxValue)) * -1)
+
+    gauge = AnalogGaugeWidget(theme=24, use_limit=False)
+    # gauge.value = 500
+    layout.addWidget(gauge)
+    gauge.minValue = minValue
+    gauge.maxValue = maxValue
+    gauge.scale_angle_size = size if size <= 270 else 270
+    gauge.low_limit_start = 135
+    gauge.low_limit_len = 27
+    gauge.high_limit_start = 378
+    gauge.high_limit_len = 27
+    slider = QtWidgets.QSlider(Qt.Horizontal)
+    slider.setMinimum(135)
+    slider.setMaximum(405)
+    slider.setValue(135 + 27)
+    slider.valueChanged.connect(valuchanged)
+    layout.addWidget(slider)
+
+    frame.show()
+    # gauge.low_limit_start = 135
+    # gauge.low_limit_len = 54
+    # gauge.high_limit_start = 351
+    # gauge.high_limit_len = 54
+    # gauge.draw_filled_polygon()
     sys.exit(app.exec_())
+
