@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from src.gui.mainGUI import Ui_MainWindow
 from src.gui.joystick_widget import Joystick
 from src.gui.analog_gauge import AnalogGaugeWidget
+from src.gui.pipeline_gauge import PipelineGauge
 
 
 # methods
@@ -137,11 +138,9 @@ class GuiConfiguration:
 
     def screen_change_buttons_clicked(self):
         sender = self.window.sender()
-        dict_sender: dict = {self.ui.btnGaugesScreen: 0,
-                             self.ui.btnGoToPositionScreen: 1,
-                             self.ui.btnReportsScreen: 2,
-                             self.ui.btnSettingScreen: 3,
-                             self.ui.btnHelpScreen: 4}
+        dict_sender: dict = {self.ui.btnGoToPositionScreen: 0,
+                             self.ui.btnGaugesScreen: 1,
+                             self.ui.btnSettingScreen: 2}
 
         self.page = dict_sender.get(sender, self.page)
 
@@ -151,9 +150,7 @@ class GuiConfiguration:
         # Main Stacked Widget Pages Changing...
         self.ui.btnGaugesScreen.clicked.connect(lambda: self.screen_change_buttons_clicked())
         self.ui.btnGoToPositionScreen.clicked.connect(lambda: self.screen_change_buttons_clicked())
-        self.ui.btnReportsScreen.clicked.connect(lambda: self.screen_change_buttons_clicked())
         self.ui.btnSettingScreen.clicked.connect(lambda: self.screen_change_buttons_clicked())
-        self.ui.btnHelpScreen.clicked.connect(lambda: self.screen_change_buttons_clicked())
         # Gui
         # Main Pages Animation
         self.ui.swMain.setTransitionDirection(Qt.Horizontal)
@@ -176,14 +173,24 @@ class GuiConfiguration:
         self.ui.gauge_pan.minValue = -180
         self.ui.gauge_pan.maxValue = 180
         self.ui.gauge_tilt = AnalogGaugeWidget(theme=24)
+        self.ui.pipeline_temp_pan = PipelineGauge()
+        self.ui.pipeline_torque_pan = PipelineGauge()
+        self.ui.gauge_pan_speed = AnalogGaugeWidget(theme=23, use_limit=False)
+        self.ui.pipeline_temp_tilt = PipelineGauge()
+        self.ui.pipeline_torque_tilt = PipelineGauge()
+        self.ui.gauge_tilt_speed = AnalogGaugeWidget(theme=23, use_limit=False)
 
-        self.ui.v_layout_pan_gauge.setContentsMargins(50, 50, 50, 50)
-        self.ui.v_layout_tilt_gauge.setContentsMargins(50, 50, 50, 50)
+        # self.ui.v_layout_pan_gauge.setContentsMargins(50, 50, 50, 50)
+        # self.ui.v_layout_tilt_gauge.setContentsMargins(50, 50, 50, 50)
 
-        self.ui.v_layout_pan_gauge.addWidget(self.ui.gauge_pan)
-        self.ui.v_layout_tilt_gauge.addWidget(self.ui.gauge_tilt)
-
-
+        self.ui.v_layout_PAN_Pos_Gauge.addWidget(self.ui.gauge_pan)
+        self.ui.v_layout_PAN_Temp_Gauge.addWidget(self.ui.pipeline_temp_pan)
+        self.ui.v_layout_PAN_Torque_Gauge.addWidget(self.ui.pipeline_torque_pan)
+        self.ui.v_layout_PAN_Speed_Gauge.addWidget(self.ui.gauge_pan_speed)
+        self.ui.v_layout_Tilt_Pos_Gauge.addWidget(self.ui.gauge_tilt)
+        self.ui.v_layout_Tilt_Temp_Gauge.addWidget(self.ui.pipeline_temp_tilt)
+        self.ui.v_layout_Tilt_Torque_Gauge.addWidget(self.ui.pipeline_torque_tilt)
+        self.ui.v_layout_Tilt_Speed_Gauge.addWidget(self.ui.gauge_tilt_speed)
 
     @property
     def page(self):
@@ -191,11 +198,9 @@ class GuiConfiguration:
 
     @page.setter
     def page(self, value: int):
-        dict_sender: dict = {self.ui.btnGaugesScreen: 0,
-                             self.ui.btnGoToPositionScreen: 1,
-                             self.ui.btnReportsScreen: 2,
-                             self.ui.btnSettingScreen: 3,
-                             self.ui.btnHelpScreen: 4}
+        dict_sender: dict = {self.ui.btnGoToPositionScreen: 0,
+                             self.ui.btnGaugesScreen: 1,
+                             self.ui.btnSettingScreen: 2}
         dict_sender_reverse = {v: k for k, v in dict_sender.items()}
         sender: QtWidgets.QPushButton = dict_sender_reverse.get(value)
         try:
