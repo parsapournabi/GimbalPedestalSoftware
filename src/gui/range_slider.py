@@ -15,7 +15,32 @@ class RangeSlider(QtWidgets.QSlider):
 
     def __init__(self, *args):
         super(RangeSlider, self).__init__(*args)
-
+        self.setStyleSheet("""#%s {
+            margin: 0px;
+        }
+        #%s::groove {
+            border-radius: 3px;
+            height: 10px;
+            margin: 0px;
+            background-color: #838ea2;
+        }
+        #%s::groove:horizontal:hover {
+            background-color: rgb(140, 140, 140);
+        }
+        #%s::handle:horizontal {
+            border: none;
+            height: 10px;
+            width: 20px;
+            margin: 0px;
+            border-radius: 2px;
+            background-color: #16191d;
+        }
+        #%s::handle:horizontal:hover {
+            background-color: #838ea2;
+        }
+        #%s::handle:horizontal:pressed {
+            background-color: #2c313c;
+        }""" % tuple([self.objectName() for _ in range(6)]))
         self._low = self.minimum()
         self._high = self.maximum()
 
