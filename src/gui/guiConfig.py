@@ -1,10 +1,15 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMessageBox
+from time import sleep
 
 from src.gui.mainGUI import Ui_MainWindow
 from src.gui.joystick_widget import Joystick
 from src.gui.analog_gauge import AnalogGaugeWidget
 from src.gui.pipeline_gauge import PipelineGauge
+from src.gui.range_slider import RangeSlider
+from src.threads.worker import WorkerThread
+from src.communication.serial_com import Serial
 
 
 # methods
@@ -78,6 +83,7 @@ class GuiConfiguration:
 
         if is_main_window:
             # Workers & Threads
+            self.thread_main_worker = WorkerThread(self.thread_main)
 
             # Normal Variables
             self.animation = QtCore.QPropertyAnimation(self.ui.frameLeftMenu, b"minimumWidth")
@@ -85,6 +91,17 @@ class GuiConfiguration:
 
             # Special Variables
             self.screen_events()
+
+            self.thread_main_worker.start()
+
+    def thread_main(self):
+        while True:
+            try:
+                self.update_combobox()
+
+            except Exception:
+                pass
+            sleep(0.00001)
 
     def setup_font_point_size(self, parent):
         for child in parent:
@@ -116,7 +133,7 @@ class GuiConfiguration:
 
             # SET MAX WIDTH
             if width == 75:
-                width_extended = 205
+                width_extended = 175
             if width_spacer == 0:
                 width_extended_spacer = 75
 
@@ -138,8 +155,8 @@ class GuiConfiguration:
 
     def screen_change_buttons_clicked(self):
         sender = self.window.sender()
-        dict_sender: dict = {self.ui.btnGoToPositionScreen: 0,
-                             self.ui.btnGaugesScreen: 1,
+        dict_sender: dict = {self.ui.btnGoToPositionScreen: 1,
+                             self.ui.btnGaugesScreen: 0,
                              self.ui.btnSettingScreen: 2}
 
         self.page = dict_sender.get(sender, self.page)
@@ -163,15 +180,14 @@ class GuiConfiguration:
 
         # First View
         self.page = 0
+        self.ui.cboxUart.clear()
 
-        joystick = Joystick()
-        joystick.setCursor(Qt.CursorShape.OpenHandCursor)
+        self.ui.joystick = Joystick()
+        self.ui.joystick.setCursor(Qt.CursorShape.OpenHandCursor)
         self.ui.v_layout_joystick.setContentsMargins(0, 0, 0, 0)
-        self.ui.v_layout_joystick.addWidget(joystick)
+        self.ui.v_layout_joystick.addWidget(self.ui.joystick)
 
         self.ui.gauge_pan = AnalogGaugeWidget(theme=23)
-        self.ui.gauge_pan.minValue = -180
-        self.ui.gauge_pan.maxValue = 180
         self.ui.gauge_tilt = AnalogGaugeWidget(theme=24)
         self.ui.pipeline_temp_pan = PipelineGauge()
         self.ui.pipeline_torque_pan = PipelineGauge()
@@ -192,21 +208,135 @@ class GuiConfiguration:
         self.ui.v_layout_Tilt_Torque_Gauge.addWidget(self.ui.pipeline_torque_tilt)
         self.ui.v_layout_Tilt_Speed_Gauge.addWidget(self.ui.gauge_tilt_speed)
 
+        # Gauges config
+        self.ui.gauge_pan.minValue = -180.0
+        self.ui.gauge_pan.maxValue = 180.0
+        self.ui.gauge_pan.scale_angle_start_value = 90
+        self.ui.gauge_pan.scale_angle_size = 360
+
+        self.ui.gauge_tilt.minValue = -90.0
+        self.ui.gauge_tilt.maxValue = 90.0
+        self.ui.gauge_tilt.scale_angle_start_value = 180
+        self.ui.gauge_tilt.scale_angle_size = 90
+        self.ui.gauge_tilt.setScalaCount(4)
+
+        # Sliders Events
+        # Slider set text events
+        self.ui.sliderLimitClockwiseTilt.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtLimitClockwiseTilt))
+        self.ui.sliderLimitAntiClockwiseTilt.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtLimitAntiClockwiseTilt))
+        self.ui.sliderLimitClockwisePAN.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtLimitClockwisePAN))
+        self.ui.sliderLimitAntiClockwisePAN.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtLimitAntiClockwisePAN))
+        self.ui.sliderScanSpeed.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtScanSpeed, True))
+        self.ui.sliderGotoPositionDegreePAN.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtGotoPositionDegreePAN))
+        self.ui.sliderGotoPositionDegreeTilt.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.sliderGotoPositionDegreeTilt_2))
+        self.ui.sliderGotoPositionSpeedPAN.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtGotoPositionSpeedPAN, True))
+        self.ui.sliderGotoPositionSpeedTilt.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtGotoPositionSpeedTilt, True))
+        self.ui.sliderSpeedPAN.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtSpeedPAN, True))
+        self.ui.sliderSpeedTilt.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtSpeedTilt, True))
+        # Range Slider set text events
+        self.ui.sliderScanPAN.sliderMoved.connect(lambda: self.set_text_for_range_slider(self.ui.txtScanPAN))
+        self.ui.sliderScanTilt.sliderMoved.connect(lambda: self.set_text_for_range_slider(self.ui.txtScanTilt))
+
+        self.ui.sliderLimitClockwisePAN.valueChanged.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_pan))
+        self.ui.sliderLimitAntiClockwisePAN.valueChanged.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_pan))
+        self.ui.sliderLimitClockwiseTilt.valueChanged.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt))
+        self.ui.sliderLimitAntiClockwiseTilt.valueChanged.connect(
+            lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt))
+
+        # Slider Setting
+        self.ui.sliderScanSpeed.setMinimum(0)
+        self.ui.sliderScanSpeed.setMaximum(60000)
+        self.ui.sliderSpeedPAN.setMinimum(0)
+        self.ui.sliderSpeedPAN.setMaximum(60000)
+        self.ui.sliderSpeedTilt.setMinimum(0)
+        self.ui.sliderSpeedTilt.setMaximum(60000)
+        self.ui.sliderGotoPositionSpeedPAN.setMinimum(0)
+        self.ui.sliderGotoPositionSpeedPAN.setMaximum(60000)
+        self.ui.sliderGotoPositionSpeedTilt.setMinimum(0)
+        self.ui.sliderGotoPositionSpeedTilt.setMaximum(60000)
+
+    def set_text_for_slider(self, text_edit, speed=False):
+        sender: QtWidgets.QSlider = self.ui.MainWindow.sender()
+        if not speed:
+            text_edit.setText(str(round(sender.value() / 1000, 2)))
+        else:
+            text_edit.setText(str(round(sender.value() / 100, 2)))
+
+    def set_text_for_range_slider(self, text_edit):
+        sender: RangeSlider = self.ui.MainWindow.sender()
+        text_edit.setText(f'{round(sender.low() / 1000, 2)} {round(sender.high() / 1000, 2)}')
+
+    def limit_slider_to_gauge(self, gauge: AnalogGaugeWidget):
+        sender: QtWidgets.QSlider = self.ui.MainWindow.sender()
+        dict_sender: dict = {self.ui.sliderLimitClockwisePAN: (False, self.ui.sliderLimitAntiClockwisePAN),
+                             self.ui.sliderLimitAntiClockwisePAN: (True, self.ui.sliderLimitClockwisePAN),
+                             self.ui.sliderLimitClockwiseTilt: (None, self.ui.sliderLimitAntiClockwiseTilt),
+                             self.ui.sliderLimitAntiClockwiseTilt: (True, self.ui.sliderLimitClockwiseTilt)}
+        anti: bool = dict_sender.get(sender)[0]
+        brother: QtWidgets.QSlider = dict_sender.get(sender)[1]
+        minimum, maximum = min(sender.minimum(), brother.minimum()), max(sender.maximum(), brother.maximum())
+        if anti:
+            gauge.low_limit = int(self.normalize_scale_x(sender.value() / 1000,
+                                                         minimum / 1000,
+                                                         maximum / 1000,
+                                                         0,
+                                                         gauge.scale_angle_size))
+        elif anti is False:
+            gauge.high_limit = int(self.normalize_scale_x(sender.value() / 1000,
+                                                          sender.minimum() / 1000,
+                                                          sender.maximum() / 1000,
+                                                          gauge.scale_angle_start_value,
+                                                          gauge.scale_angle_size))
+            gauge.high_limit = int(sender.value() / 1000)
+        else:
+            gauge.high_limit = int(self.normalize_scale_x(-(sender.value() / 1000),
+                                                          minimum / 1000,
+                                                          maximum / 1000,
+                                                          0,
+                                                          gauge.scale_angle_size))
+        gauge.update()
+
+    @staticmethod
+    def normalize_scale_x(OldValue, OldMin, OldMax, NewMin, NewMax):
+        """Normalizing data"""
+        return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+
+    def update_combobox(self):
+        ports = Serial.get_available_ports()
+        for port in ports:
+            if port.name + ' ' + port.description not in [self.ui.cboxUart.itemText(i) for i in
+                                                          range(self.ui.cboxUart.count())]:
+                self.ui.cboxUart.addItem(port.name + ' ' + port.description)
+            if self.ui.cboxUart.count() > len(ports):
+                for i in range(self.ui.cboxUart.count()):
+                    if self.ui.cboxUart.itemText(i) not in [p.name + ' ' + p.description for p in ports]:
+                        self.ui.cboxUart.removeItem(i)
+
     @property
     def page(self):
         return self.ui.swMain.currentIndex()
 
     @page.setter
     def page(self, value: int):
-        dict_sender: dict = {self.ui.btnGoToPositionScreen: 0,
-                             self.ui.btnGaugesScreen: 1,
+        dict_sender: dict = {self.ui.btnGoToPositionScreen: 1,
+                             self.ui.btnGaugesScreen: 0,
                              self.ui.btnSettingScreen: 2}
         dict_sender_reverse = {v: k for k, v in dict_sender.items()}
         sender: QtWidgets.QPushButton = dict_sender_reverse.get(value)
         try:
 
             btn: QtWidgets.QPushButton = dict_sender_reverse.get(self.page)
-            print('BTN is ', btn)
             if btn is not None:
                 self.remove_pages_style_sheet(btn)
             self.ui.swMain.slideToWidgetIndex(value)
