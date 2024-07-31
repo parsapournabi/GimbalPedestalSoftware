@@ -44,10 +44,8 @@ class AnalogGaugeWidget(QWidget):
 
     """
     valueChanged = Signal(int)
-    low_limit_start: int = 0
-    low_limit_len: int = 0
-    high_limit_start: int = 0
-    high_limit_len: int = 0
+    low_limit: int = 0
+    high_limit: int = 0
 
     def __init__(self, parent=None, theme: int = 1, use_limit: bool = True):
         super(AnalogGaugeWidget, self).__init__(parent)
@@ -101,8 +99,8 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # DEFAULT MINIMUM AND MAXIMUM VALUE
         ################################################################################################
-        self.minValue = -90.00
-        self.maxValue = 90.00
+        self.minValue = -180.00
+        self.maxValue = 180.00
         ################################################################################################
         # DEFAULT START VALUE
         ################################################################################################
@@ -131,12 +129,12 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # DEFAULT SCALE VALUE
         ################################################################################################
-        self.scale_angle_start_value = 135
-        self.scale_angle_size = 270
+        self.scale_angle_start_value = 180
+        self.scale_angle_size = 180
 
         self.angle_offset = 0
 
-        self.setScalaCount(10)
+        self.setScalaCount(8)
         self.scala_subdiv_count = 5
 
         self.pen = QPen(QColor(0, 0, 0))
@@ -743,7 +741,6 @@ class AnalogGaugeWidget(QWidget):
         ################################################################################################
         # SET NEEDLE SIZE
         ################################################################################################
-        print(- self.widget_diameter / 2 * self.needle_scale_factor)
         self.change_value_needle_style([QPolygon([
             QPoint(4, 30),
             QPoint(-4, 30),
@@ -1055,7 +1052,6 @@ class AnalogGaugeWidget(QWidget):
         if not self.enableBarGraph and bar_graph:
             # float_value = ((lenght / (self.maxValue - self.minValue)) * (self.value - self.minValue))
             lenght = int(round((lenght / (self.maxValue - self.minValue)) * (self.value - self.minValue)))
-            print('BARGRAPH', lenght)
 
         # mymax = 0
 
@@ -1119,15 +1115,16 @@ class AnalogGaugeWidget(QWidget):
                 low_limit_colored_scale_polygon = self.create_polygon_pie(
                     ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
                     (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
-                    self.low_limit_start, self.low_limit_len)
+                    self.scale_angle_start_value, self.low_limit)
                 high_limit_colored_scale_polygon = self.create_polygon_pie(
                     ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
                     (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
-                    self.high_limit_start, self.high_limit_len)
+                    (self.scale_angle_start_value + self.scale_angle_size) - self.high_limit, self.high_limit)
                 colored_scale_polygon = self.create_polygon_pie(
                     ((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_outer_radius_factor,
                     (((self.widget_diameter / 2) - (self.pen.width() / 2)) * self.gauge_color_inner_radius_factor),
-                    self.low_limit_start + self.low_limit_len, self.high_limit_start - (self.low_limit_start + self.low_limit_len))
+                    self.scale_angle_start_value + self.low_limit,
+                    self.scale_angle_size - (self.high_limit + self.low_limit))
 
                 # grad.drawPoints(QPointF(0, 0), - self.scale_angle_size - self.scale_angle_start_value +
                 #                         self.angle_offset - 1)
@@ -1205,8 +1202,11 @@ class AnalogGaugeWidget(QWidget):
             y = text_radius * math.sin(math.radians(angle))
 
             text = [x - int(w / 2), y - int(h / 2), int(w), int(h), Qt.AlignCenter, text]
-            print(text[0], text[1], text[2], text[3], text[4], text[5])
-            painter.drawText(int(text[0]), int(text[1]), text[2], text[3], text[4], text[5])
+            if self.scale_angle_start_value == 90 and self.scale_angle_size == 360:
+                if text[5] != '180':
+                    painter.drawText(int(text[0]), int(text[1]), text[2], text[3], text[4], text[5])
+            else:
+                painter.drawText(int(text[0]), int(text[1]), text[2], text[3], text[4], text[5])
         # painter.restore()
 
     ################################################################################################
@@ -1520,12 +1520,21 @@ class AnalogGaugeWidget(QWidget):
 
 # END ==>
 ################################################################################################
+def normalize_scale_x(OldValue, OldMin, OldMax, NewMin, NewMax):
+    """Normalizing data"""
+    return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
+
 
 def valuchanged():
-    gauge.low_limit_len = slider.value() - 135
+    gauge.high_limit = round(normalize_scale_x(slider.value(),
+                                              slider.minimum(),
+                                              slider.maximum(),
+                                              0,
+                                              gauge.scale_angle_size))
+    # gauge.high_limit = slider.value()
     gauge.updateValue(gauge.value + 0.03)
     gauge.update()
-    print('Low limit is', gauge.low_limit_len)
+    print('Low limit is', gauge.high_limit)
 
 
 if __name__ == '__main__':
@@ -1537,25 +1546,28 @@ if __name__ == '__main__':
     frame = QtWidgets.QFrame()
     layout = QtWidgets.QVBoxLayout(frame)
     cnt = 0
-    minValue = -180
-    maxValue = 180
-    size = (minValue + maxValue) if (minValue * maxValue) >= 0 else max((minValue, maxValue)) + (
-                min((minValue, maxValue)) * -1)
+    # minValue = -180
+    # maxValue = 180
+    # size = (minValue + maxValue) if (minValue * maxValue) >= 0 else max((minValue, maxValue)) + (
+    #             min((minValue, maxValue)) * -1)
 
-    gauge = AnalogGaugeWidget(theme=24, use_limit=False)
+    gauge = AnalogGaugeWidget(theme=24)
     # gauge.value = 500
     layout.addWidget(gauge)
-    gauge.minValue = minValue
-    gauge.maxValue = maxValue
-    gauge.scale_angle_size = size if size <= 270 else 270
-    gauge.low_limit_start = 135
-    gauge.low_limit_len = 27
-    gauge.high_limit_start = 378
-    gauge.high_limit_len = 27
+    # gauge.minValue = minValue
+    # gauge.maxValue = maxValue
+    # gauge.scale_angle_size = size if size <= 270 else 270
+    # gauge.low_limit = 0
+    # gauge.high_limit = 0
+    gauge.minValue = -90
+    gauge.maxValue = 90
+    gauge.scale_angle_start_value = 180
+    gauge.scale_angle_size = 90
+    gauge.setScalaCount(6)
     slider = QtWidgets.QSlider(Qt.Horizontal)
-    slider.setMinimum(135)
-    slider.setMaximum(405)
-    slider.setValue(135 + 27)
+    slider.setMinimum(-90)
+    slider.setMaximum(90)
+    slider.setValue(0)
     slider.valueChanged.connect(valuchanged)
     layout.addWidget(slider)
 
@@ -1566,4 +1578,3 @@ if __name__ == '__main__':
     # gauge.high_limit_len = 54
     # gauge.draw_filled_polygon()
     sys.exit(app.exec_())
-
