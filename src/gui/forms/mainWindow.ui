@@ -48,16 +48,16 @@
 	background-color: #16191d;
 	border: none;
 }
-#frameCommunicationsButtons QPushButton, #frameFooter QPushButton, #swMain QPushButton {
+#gbCommunications QPushButton, #frameFooter QPushButton, #swMain QPushButton {
 	background-color: #2c313c;
 	border: 1px solid #838ea2;
 	border-radius: 6px;
 }
-#frameCommunicationsButtons QPushButton::hover:!pressed, #frameFooter QPushButton::hover:!pressed, #swMain QPushButton::hover:!pressed {
+#gbCommunications QPushButton::hover:!pressed, #frameFooter QPushButton::hover:!pressed, #swMain QPushButton::hover:!pressed {
 	background-color: #1f232a;
 	border-color: #1f232a;
 }
-#frameCommunicationsButtons QPushButton::hover, #frameFooter QPushButton::hover, #swMain QPushButton::hover{
+#gbCommunications QPushButton::hover, #frameFooter QPushButton::hover, #swMain QPushButton::hover{
 	background-color: #16191d;
 	border-color: #16191d;
 }
@@ -72,6 +72,36 @@
 	background-color: transparent;
 	border: none;
 }*/
+QTabWidget::pane {
+	border: none;
+}
+QTabBar::tab {
+    background-color: #343b47;
+    border: 1px solid #838ea2;
+    border-bottom: none; /* same as the pane color */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    min-width: 30ex;
+	max-height: 12px;
+    padding: 1px;
+}
+
+QTabBar::tab:hover {
+    background-color: #838ea2;
+}
+
+QTabBar::tab:selected {
+    border-color: #16191d;
+	background-color: #16191d /* same as pane color */
+}
+
+QTabBar::tab:!selected {
+    margin-top: 1px; /* make non-selected tabs look smaller */
+}
+#tabLAN, #tabSerial{
+	background-color: #343b47;
+	border: none;
+}
 QGroupBox {
 	border: 1px solid #838ea2;
 	border-radius: 8px;
@@ -167,6 +197,18 @@ QSlider::handle:horizontal:hover {
 }
 QSlider::handle:horizontal:pressed {
 	background-color: #2c313c;
+}
+#sliderGotoPositionSpeedTilt::add-page:horizontal,#sliderGotoPositionSpeedPAN::add-page:horizontal, #sliderSpeedTilt::add-page:horizontal, #sliderSpeedPAN::add-page:horizontal, #sliderScanSpeed::add-page:horizontal{
+	background-color: #838ea2;
+}
+#sliderGotoPositionSpeedTilt::groove:horizontal:hover, #sliderGotoPositionSpeedPAN::groove:horizontal:hover, #sliderSpeedTilt::groove:horizontal:hover, #sliderSpeedPAN::groove:horizontal:hover, #sliderScanSpeed::groove:horizontal:hover {
+	background-color: #16191d
+}
+#sliderGotoPositionSpeedTilt::groove:horizontal, #sliderGotoPositionSpeedPAN::groove:horizontal, #sliderSpeedTilt::groove:horizontal, #sliderSpeedPAN::groove:horizontal, #sliderScanSpeed::groove:horizontal {
+	border-radius: 3px;
+	height: 10px;
+	margin: 0px;
+	background-color: #16191d;
 }
 QPlainTextEdit {
 	border: 1px solid #838ea2;
@@ -392,46 +434,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnGoToPositionScreen">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>50</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Arial</family>
-          <pointsize>11</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="cursor">
-         <cursorShape>PointingHandCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string> Go to Position</string>
-        </property>
-        <property name="icon">
-         <iconset resource="imagesresources.qrc">
-          <normaloff>:/icons/icons/Position.png</normaloff>:/icons/icons/Position.png</iconset>
-        </property>
-        <property name="iconSize">
-         <size>
-          <width>46</width>
-          <height>46</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btnGaugesScreen">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
@@ -449,8 +451,8 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <font>
           <family>Arial</family>
           <pointsize>11</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="cursor">
@@ -460,7 +462,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Gauges &amp; Limits</string>
+         <string>GoToPosition</string>
         </property>
         <property name="icon">
          <iconset resource="imagesresources.qrc">
@@ -470,6 +472,46 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <size>
           <width>48</width>
           <height>48</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnGoToPositionScreen">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>50</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Arial</family>
+          <pointsize>11</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string>Limits</string>
+        </property>
+        <property name="icon">
+         <iconset resource="imagesresources.qrc">
+          <normaloff>:/icons/icons/Position.png</normaloff>:/icons/icons/Position.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>46</width>
+          <height>46</height>
          </size>
         </property>
        </widget>
@@ -505,8 +547,8 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <font>
           <family>Arial</family>
           <pointsize>11</pointsize>
-          <weight>50</weight>
-          <bold>false</bold>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="cursor">
@@ -555,7 +597,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>190</height>
+          <height>111</height>
          </size>
         </property>
         <property name="frameShape">
@@ -565,6 +607,15 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QGroupBox" name="gbCommunications">
            <property name="maximumSize">
@@ -584,6 +635,18 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
              <number>0</number>
             </property>
             <item>
@@ -613,7 +676,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_4">
                <property name="spacing">
-                <number>15</number>
+                <number>0</number>
                </property>
                <property name="leftMargin">
                 <number>10</number>
@@ -625,337 +688,441 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                 <number>10</number>
                </property>
                <property name="bottomMargin">
-                <number>10</number>
-               </property>
-               <item>
-                <widget class="QComboBox" name="cboxUart">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>10</pointsize>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <item>
-                  <property name="text">
-                   <string>COM1</string>
-                  </property>
-                 </item>
-                 <item>
-                  <property name="text">
-                   <string>COM2</string>
-                  </property>
-                 </item>
-                </widget>
-               </item>
-               <item>
-                <widget class="QFrame" name="frameCommuincationLAN">
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_13">
-                  <property name="spacing">
-                   <number>5</number>
-                  </property>
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="label_40">
-                    <property name="font">
-                     <font>
-                      <family>Arial</family>
-                      <pointsize>10</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>LAN IP/ Port</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="txtLanIp">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Arial</family>
-                      <pointsize>10</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="placeholderText">
-                     <string>192.168.1.200</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="txtLanPort">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Arial</family>
-                      <pointsize>10</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="placeholderText">
-                     <string>8080</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-               <item>
-                <widget class="QFrame" name="frameCommunicationAXU">
-                 <property name="frameShape">
-                  <enum>QFrame::StyledPanel</enum>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Raised</enum>
-                 </property>
-                 <layout class="QHBoxLayout" name="horizontalLayout_14">
-                  <property name="spacing">
-                   <number>5</number>
-                  </property>
-                  <property name="leftMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="topMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="rightMargin">
-                   <number>0</number>
-                  </property>
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="label_41">
-                    <property name="font">
-                     <font>
-                      <family>Arial</family>
-                      <pointsize>10</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>AXU IP/ Port</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="txtLanAxuIp">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Arial</family>
-                      <pointsize>10</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="placeholderText">
-                     <string>192.168.1.200</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QLineEdit" name="txtLanAxuPort">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Arial</family>
-                      <pointsize>10</pointsize>
-                      <weight>75</weight>
-                      <bold>true</bold>
-                     </font>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignCenter</set>
-                    </property>
-                    <property name="placeholderText">
-                     <string>8080</string>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item>
-             <widget class="QFrame" name="frameCommunicationsButtons">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>120</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>185</width>
-                <height>156</height>
-               </size>
-              </property>
-              <property name="sizeIncrement">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::StyledPanel</enum>
-              </property>
-              <property name="frameShadow">
-               <enum>QFrame::Raised</enum>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_3">
-               <property name="spacing">
-                <number>15</number>
-               </property>
-               <property name="leftMargin">
                 <number>0</number>
                </property>
-               <property name="topMargin">
-                <number>10</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>10</number>
-               </property>
                <item>
-                <widget class="QPushButton" name="btnUartConnect">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+                <widget class="QTabWidget" name="tabWidget">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>97</height>
+                  </size>
                  </property>
                  <property name="font">
                   <font>
                    <family>Arial</family>
-                   <pointsize>10</pointsize>
+                   <pointsize>9</pointsize>
                    <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
+                 <property name="tabPosition">
+                  <enum>QTabWidget::North</enum>
                  </property>
-                 <property name="text">
-                  <string>Not connected</string>
+                 <property name="currentIndex">
+                  <number>0</number>
                  </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnLanConnect">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+                 <property name="elideMode">
+                  <enum>Qt::ElideNone</enum>
                  </property>
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>10</pointsize>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
-                 </property>
-                 <property name="text">
-                  <string>Not connected</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="btnLanAxuConnect">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>10</pointsize>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="cursor">
-                  <cursorShape>PointingHandCursor</cursorShape>
-                 </property>
-                 <property name="text">
-                  <string>Not connected</string>
-                 </property>
+                 <widget class="QWidget" name="tabLAN">
+                  <attribute name="title">
+                   <string>LAN</string>
+                  </attribute>
+                  <layout class="QVBoxLayout" name="verticalLayout_3">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QFrame" name="frameCommuincationLAN">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>30</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_13">
+                      <property name="spacing">
+                       <number>5</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="label_40">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>LAN IP/ Port</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="txtLanIp">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                        <property name="placeholderText">
+                         <string>192.168.1.200</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="txtLanPort">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                        <property name="placeholderText">
+                         <string>8080</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btnLanConnect">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>8</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
+                        <property name="text">
+                         <string>Not connected</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QFrame" name="frameCommunicationAXU">
+                     <property name="minimumSize">
+                      <size>
+                       <width>0</width>
+                       <height>25</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>25</height>
+                      </size>
+                     </property>
+                     <property name="frameShape">
+                      <enum>QFrame::StyledPanel</enum>
+                     </property>
+                     <property name="frameShadow">
+                      <enum>QFrame::Raised</enum>
+                     </property>
+                     <layout class="QHBoxLayout" name="horizontalLayout_14">
+                      <property name="spacing">
+                       <number>5</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="label_41">
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="text">
+                         <string>AXU IP/ Port</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="txtLanAxuIp">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                        <property name="placeholderText">
+                         <string>192.168.1.200</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLineEdit" name="txtLanAxuPort">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>100</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>9</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignCenter</set>
+                        </property>
+                        <property name="placeholderText">
+                         <string>8080</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="btnLanAxuConnect">
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                          <horstretch>0</horstretch>
+                          <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>25</height>
+                         </size>
+                        </property>
+                        <property name="font">
+                         <font>
+                          <family>Arial</family>
+                          <pointsize>8</pointsize>
+                          <weight>75</weight>
+                          <bold>true</bold>
+                         </font>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
+                        <property name="text">
+                         <string>Not connected</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="tabSerial">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>16777215</height>
+                   </size>
+                  </property>
+                  <attribute name="title">
+                   <string>Serial</string>
+                  </attribute>
+                  <layout class="QHBoxLayout" name="horizontalLayout_29">
+                   <property name="spacing">
+                    <number>5</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QComboBox" name="cboxUart">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>25</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Arial</family>
+                       <pointsize>9</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>COM1</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>COM2</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QPushButton" name="btnUartConnect">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>119</width>
+                       <height>25</height>
+                      </size>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Arial</family>
+                       <pointsize>9</pointsize>
+                       <weight>75</weight>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="cursor">
+                      <cursorShape>PointingHandCursor</cursorShape>
+                     </property>
+                     <property name="text">
+                      <string>Not connected</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
                 </widget>
                </item>
               </layout>
@@ -1004,19 +1171,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QLabel" name="label">
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>10</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Tx</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QLabel" name="label_2">
                  <property name="font">
                   <font>
@@ -1025,7 +1179,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                   </font>
                  </property>
                  <property name="text">
-                  <string>LAN</string>
+                  <string>LAN | UART</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1080,38 +1234,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QLabel" name="label_4">
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>UART</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="lblUARTDataSend">
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>7A-02-00-00-00-00-00-00-00-3D-00-00-FF</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -1137,19 +1259,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                 <number>0</number>
                </property>
                <item>
-                <widget class="QLabel" name="label_8">
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>10</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>Rx</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
                 <widget class="QLabel" name="label_5">
                  <property name="font">
                   <font>
@@ -1158,7 +1267,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                   </font>
                  </property>
                  <property name="text">
-                  <string>LAN</string>
+                  <string>LAN | UART</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -1213,38 +1322,6 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                  </property>
                 </widget>
                </item>
-               <item>
-                <widget class="QLabel" name="label_7">
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>UART</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="lblUARTDataRecieve">
-                 <property name="font">
-                  <font>
-                   <family>Arial</family>
-                   <pointsize>9</pointsize>
-                  </font>
-                 </property>
-                 <property name="text">
-                  <string>7A-02-00-00-00-00-00-00-00-3D-00-00-FF</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
               </layout>
              </widget>
             </item>
@@ -1265,7 +1342,7 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>420</height>
+          <height>400</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -1277,12 +1354,18 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="pageGotoPosition">
-         <layout class="QHBoxLayout" name="horizontalLayout_8">
+        <widget class="QWidget" name="pageGaugeLimits">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
-           <widget class="QGroupBox" name="groupBox">
+           <widget class="QGroupBox" name="gbGotoPosition">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
@@ -1565,8 +1648,17 @@ QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
                      <property name="maximum">
                       <number>60000</number>
                      </property>
+                     <property name="singleStep">
+                      <number>1</number>
+                     </property>
+                     <property name="pageStep">
+                      <number>10</number>
+                     </property>
                      <property name="orientation">
                       <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="invertedAppearance">
+                      <bool>false</bool>
                      </property>
                      <property name="tickPosition">
                       <enum>QSlider::NoTicks</enum>
@@ -1955,7 +2047,13 @@ border-radius: 7px;</string>
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="gbScan">
+           <widget class="QGroupBox" name="gbPANGauge">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="font">
              <font>
               <family>Arial</family>
@@ -1963,41 +2061,23 @@ border-radius: 7px;</string>
              </font>
             </property>
             <property name="title">
-             <string>Scan</string>
+             <string>PAN Gauge</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_18">
+            <layout class="QVBoxLayout" name="verticalLayout_36">
              <property name="spacing">
-              <number>8</number>
-             </property>
-             <property name="leftMargin">
-              <number>11</number>
-             </property>
-             <property name="topMargin">
-              <number>17</number>
-             </property>
-             <property name="rightMargin">
-              <number>11</number>
-             </property>
-             <property name="bottomMargin">
-              <number>10</number>
+              <number>2</number>
              </property>
              <item>
-              <widget class="QFrame" name="framePANScan">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
+              <widget class="QFrame" name="frame_5">
                <property name="frameShape">
                 <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_19">
+               <layout class="QHBoxLayout" name="horizontalLayout_30">
                 <property name="spacing">
-                 <number>1</number>
+                 <number>5</number>
                 </property>
                 <property name="leftMargin">
                  <number>0</number>
@@ -2011,8 +2091,197 @@ border-radius: 7px;</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item alignment="Qt::AlignBottom">
+                 <widget class="QFrame" name="framePANTorque">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_PAN_Torque_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignBottom">
+                 <widget class="QFrame" name="framePANTemprature">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_PAN_Temp_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
                 <item>
-                 <widget class="QLabel" name="label_29">
+                 <widget class="QFrame" name="framePANGauges">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_PAN_Pos_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignBottom">
+                 <widget class="QFrame" name="framePANSpeedGauge">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>105</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_PAN_Speed_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item alignment="Qt::AlignBottom">
+              <widget class="QFrame" name="frameGaugePANFooter">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_12">
+                <property name="spacing">
+                 <number>10</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="lblPANTorqueValue">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="font">
                    <font>
                     <family>Arial</family>
@@ -2022,65 +2291,103 @@ border-radius: 7px;</string>
                    </font>
                   </property>
                   <property name="text">
-                   <string>PAN °</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item alignment="Qt::AlignLeft">
-                 <widget class="QLineEdit" name="txtScanPAN">
-                  <property name="font">
-                   <font>
-                    <family>Arial</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>180.000</string>
+                   <string>Torque: 33%</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QSlider" name="sliderScanPAN">
+                 <widget class="QLabel" name="lblPANTempValue">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="minimum">
-                   <number>-180000</number>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
                   </property>
-                  <property name="maximum">
-                   <number>180000</number>
+                  <property name="text">
+                   <string>Temp: 20°C</string>
                   </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="tickPosition">
-                   <enum>QSlider::NoTicks</enum>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
                   </property>
-                  <property name="tickInterval">
-                   <number>1</number>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblPANSpeedValue">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Speed: 200°/s</string>
                   </property>
                  </widget>
                 </item>
                </layout>
               </widget>
              </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="gbTiltGauge">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Arial</family>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="title">
+             <string>Tilt Gauge</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_29">
+             <property name="spacing">
+              <number>2</number>
+             </property>
              <item>
-              <widget class="QFrame" name="frameTiltScan">
+              <widget class="QFrame" name="frame_6">
                <property name="frameShape">
                 <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_20">
+               <layout class="QHBoxLayout" name="horizontalLayout_32">
                 <property name="spacing">
-                 <number>1</number>
+                 <number>5</number>
                 </property>
                 <property name="leftMargin">
                  <number>0</number>
@@ -2094,91 +2401,179 @@ border-radius: 7px;</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
-                <item>
-                 <widget class="QLabel" name="label_30">
-                  <property name="font">
-                   <font>
-                    <family>Arial</family>
-                    <pointsize>9</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Tilt °</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QLineEdit" name="txtScanTilt">
-                  <property name="font">
-                   <font>
-                    <family>Arial</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>90.000</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSlider" name="sliderScanTilt">
+                <item alignment="Qt::AlignBottom">
+                 <widget class="QFrame" name="frameTiltTorque">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="minimum">
-                   <number>-90000</number>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>105</height>
+                   </size>
                   </property>
-                  <property name="maximum">
-                   <number>90000</number>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
                   </property>
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
                   </property>
-                  <property name="tickPosition">
-                   <enum>QSlider::NoTicks</enum>
+                  <layout class="QVBoxLayout" name="v_layout_Tilt_Torque_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignBottom">
+                 <widget class="QFrame" name="frameTiltTemprature">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
                   </property>
-                  <property name="tickInterval">
-                   <number>1</number>
+                  <property name="minimumSize">
+                   <size>
+                    <width>35</width>
+                    <height>105</height>
+                   </size>
                   </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_Tilt_Temp_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frameTiltGauges">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_Tilt_Pos_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignBottom">
+                 <widget class="QFrame" name="frameTiltSpeedGauge">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>105</width>
+                    <height>105</height>
+                   </size>
+                  </property>
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <layout class="QVBoxLayout" name="v_layout_Tilt_Speed_Gauge">
+                   <property name="spacing">
+                    <number>0</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                  </layout>
                  </widget>
                 </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QFrame" name="frameSpeedScan">
+              <widget class="QFrame" name="frameGaugeTiltFooter">
                <property name="frameShape">
                 <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <layout class="QVBoxLayout" name="verticalLayout_21">
+               <layout class="QHBoxLayout" name="horizontalLayout_31">
                 <property name="spacing">
-                 <number>1</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
+                 <number>10</number>
                 </property>
                 <item>
-                 <widget class="QLabel" name="label_31">
+                 <widget class="QLabel" name="lblTiltTorqueValue">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
                   <property name="font">
                    <font>
                     <family>Arial</family>
@@ -2188,133 +2583,66 @@ border-radius: 7px;</string>
                    </font>
                   </property>
                   <property name="text">
-                   <string>Speed (°/s)</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                   <string>Torque: 33%</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLineEdit" name="txtScanSpeed">
-                  <property name="font">
-                   <font>
-                    <family>Arial</family>
-                    <pointsize>10</pointsize>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>0.000</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSlider" name="sliderScanSpeed">
+                 <widget class="QLabel" name="lblTiltTempValue">
                   <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="minimum">
-                   <number>0</number>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
                   </property>
-                  <property name="maximum">
-                   <number>200</number>
+                  <property name="text">
+                   <string>Temp: 20°C</string>
                   </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
                   <property name="orientation">
                    <enum>Qt::Horizontal</enum>
                   </property>
-                  <property name="tickPosition">
-                   <enum>QSlider::NoTicks</enum>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
                   </property>
-                  <property name="tickInterval">
-                   <number>1</number>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblTiltSpeedValue">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Speed: 200°/s</string>
                   </property>
                  </widget>
                 </item>
                </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cbPANScan">
-               <property name="font">
-                <font>
-                 <family>Arial</family>
-                 <pointsize>9</pointsize>
-                </font>
-               </property>
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="text">
-                <string>PAN Scan</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="cbTiltScan">
-               <property name="font">
-                <font>
-                 <family>Arial</family>
-                 <pointsize>9</pointsize>
-                </font>
-               </property>
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="text">
-                <string>Tilt Scan</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="verticalSpacer_6">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnScan">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>30</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <family>Arial</family>
-                 <pointsize>10</pointsize>
-                 <weight>75</weight>
-                 <bold>true</bold>
-                </font>
-               </property>
-               <property name="cursor">
-                <cursorShape>PointingHandCursor</cursorShape>
-               </property>
-               <property name="text">
-                <string>Scan</string>
-               </property>
               </widget>
              </item>
             </layout>
@@ -2322,19 +2650,25 @@ border-radius: 7px;</string>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="pageGaugeLimits">
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <widget class="QWidget" name="pageGotoPosition">
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
           <property name="topMargin">
            <number>0</number>
           </property>
           <property name="bottomMargin">
-           <number>5</number>
+           <number>0</number>
           </property>
           <item>
            <widget class="QGroupBox" name="gbLimitations">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>300</width>
+              <width>16777215</width>
               <height>16777215</height>
              </size>
             </property>
@@ -2778,7 +3112,7 @@ border-radius: 7px;</string>
            </widget>
           </item>
           <item>
-           <widget class="QGroupBox" name="gbPANGauge">
+           <widget class="QGroupBox" name="gbScan">
             <property name="font">
              <font>
               <family>Arial</family>
@@ -2786,20 +3120,41 @@ border-radius: 7px;</string>
              </font>
             </property>
             <property name="title">
-             <string>PAN Gauge</string>
+             <string>Scan</string>
             </property>
-            <layout class="QVBoxLayout" name="v_layout_pan_gauge">
+            <layout class="QVBoxLayout" name="verticalLayout_18">
+             <property name="spacing">
+              <number>8</number>
+             </property>
+             <property name="leftMargin">
+              <number>11</number>
+             </property>
+             <property name="topMargin">
+              <number>17</number>
+             </property>
+             <property name="rightMargin">
+              <number>11</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
              <item>
-              <widget class="QFrame" name="framePANGauges">
+              <widget class="QFrame" name="framePANScan">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="frameShape">
                 <enum>QFrame::StyledPanel</enum>
                </property>
                <property name="frameShadow">
                 <enum>QFrame::Raised</enum>
                </property>
-               <layout class="QVBoxLayout" name="v_layout_PAN_Pos_Gauge">
+               <layout class="QVBoxLayout" name="verticalLayout_19">
                 <property name="spacing">
-                 <number>0</number>
+                 <number>1</number>
                 </property>
                 <property name="leftMargin">
                  <number>0</number>
@@ -2813,607 +3168,310 @@ border-radius: 7px;</string>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item>
+                 <widget class="QLabel" name="label_29">
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>PAN °</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item alignment="Qt::AlignLeft">
+                 <widget class="QLineEdit" name="txtScanPAN">
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>10</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>180.000</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSlider" name="sliderScanPAN">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>-180000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>180000</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="tickPosition">
+                   <enum>QSlider::NoTicks</enum>
+                  </property>
+                  <property name="tickInterval">
+                   <number>1</number>
+                  </property>
+                 </widget>
+                </item>
                </layout>
               </widget>
              </item>
              <item>
-              <widget class="QFrame" name="framePANPipeLines">
+              <widget class="QFrame" name="frameTiltScan">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_20">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_30">
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Tilt °</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="txtScanTilt">
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>10</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>90.000</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSlider" name="sliderScanTilt">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>-90000</number>
+                  </property>
+                  <property name="maximum">
+                   <number>90000</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="tickPosition">
+                   <enum>QSlider::NoTicks</enum>
+                  </property>
+                  <property name="tickInterval">
+                   <number>1</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QFrame" name="frameSpeedScan">
+               <property name="frameShape">
+                <enum>QFrame::StyledPanel</enum>
+               </property>
+               <property name="frameShadow">
+                <enum>QFrame::Raised</enum>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_21">
+                <property name="spacing">
+                 <number>1</number>
+                </property>
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_31">
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>9</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Speed (°/s)</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="txtScanSpeed">
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>10</pointsize>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>0.000</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSlider" name="sliderScanSpeed">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimum">
+                   <number>0</number>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="tickPosition">
+                   <enum>QSlider::NoTicks</enum>
+                  </property>
+                  <property name="tickInterval">
+                   <number>1</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="cbPANScan">
+               <property name="font">
+                <font>
+                 <family>Arial</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="text">
+                <string>PAN Scan</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QCheckBox" name="cbTiltScan">
+               <property name="font">
+                <font>
+                 <family>Arial</family>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
+               <property name="text">
+                <string>Tilt Scan</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnScan">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>0</height>
+                 <height>30</height>
                 </size>
                </property>
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
-                 <height>200</height>
+                 <height>30</height>
                 </size>
                </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
+               <property name="font">
+                <font>
+                 <family>Arial</family>
+                 <pointsize>10</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
                </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_12">
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QFrame" name="framePANPipeLineTemp">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_29">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item alignment="Qt::AlignTop">
-                    <widget class="QLabel" name="lblPANTempValue">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>9</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Temprature: 20°C</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="framePANTemprature">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QVBoxLayout" name="v_layout_PAN_Temp_Gauge">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="framePANPipeLineTorque">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_32">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="lblPANTorqueValue">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>9</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Torque: 33%</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="framePANTorque">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QVBoxLayout" name="v_layout_PAN_Torque_Gauge">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="framePANGaugeSpeed">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_34">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="lblPANSpeedValue">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>9</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Speed: 200°/s</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="framePANSpeedGauge">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QVBoxLayout" name="v_layout_PAN_Speed_Gauge">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="gbTiltGauge">
-            <property name="font">
-             <font>
-              <family>Arial</family>
-              <pointsize>9</pointsize>
-             </font>
-            </property>
-            <property name="title">
-             <string>Tilt Gauge</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_31">
-             <item>
-              <widget class="QFrame" name="frameTiltGauges">
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
+               <property name="text">
+                <string>Scan</string>
                </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QVBoxLayout" name="v_layout_Tilt_Pos_Gauge">
-                <property name="spacing">
-                 <number>0</number>
-                </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QFrame" name="frameTiltPipeLines">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>200</height>
-                </size>
-               </property>
-               <property name="frameShape">
-                <enum>QFrame::StyledPanel</enum>
-               </property>
-               <property name="frameShadow">
-                <enum>QFrame::Raised</enum>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_26">
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>0</number>
-                </property>
-                <item>
-                 <widget class="QFrame" name="frameTiltPipeLineTemp">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_30">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item alignment="Qt::AlignTop">
-                    <widget class="QLabel" name="lblTiltTempValue">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>9</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Temprature: 20°C</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="frameTiltTemprature">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QVBoxLayout" name="v_layout_Tilt_Temp_Gauge">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frameTiltPipeLineTorque">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_33">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="lblTiltTorqueValue">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>9</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Torque: 33%</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="frameTiltTorque">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QVBoxLayout" name="v_layout_Tilt_Torque_Gauge">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frameTiltGaugeSpeed">
-                  <property name="frameShape">
-                   <enum>QFrame::StyledPanel</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Raised</enum>
-                  </property>
-                  <layout class="QVBoxLayout" name="verticalLayout_35">
-                   <property name="spacing">
-                    <number>5</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="rightMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="lblTiltSpeedValue">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Arial</family>
-                       <pointsize>9</pointsize>
-                       <weight>75</weight>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Speed: 200°/s</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QFrame" name="frameTiltSpeedGauge">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="frameShape">
-                      <enum>QFrame::StyledPanel</enum>
-                     </property>
-                     <property name="frameShadow">
-                      <enum>QFrame::Raised</enum>
-                     </property>
-                     <layout class="QVBoxLayout" name="v_layout_Tilt_Speed_Gauge">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
               </widget>
              </item>
             </layout>
