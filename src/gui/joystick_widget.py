@@ -10,12 +10,16 @@ class Direction(Enum):
     Right = 1
     Up = 2
     Down = 3
+    TopLef = 4
+    TopRight = 5
+    DownLeft = 6
+    DownRight = 7
 
 
 class Joystick(QWidget):
     def __init__(self, parent=None):
         super(Joystick, self).__init__(parent)
-        self.setMinimumSize(110, 110)
+        self.setMinimumSize(120, 120)
         self.movingOffset = QPointF(0, 0)
         self.grabCenter = False
         self.__maxDistance = 50
@@ -50,13 +54,22 @@ class Joystick(QWidget):
         angle = normVector.angle()
 
         distance = min(currentDistance / self.__maxDistance, 1.0)
-        if 45 <= angle < 135:
-            return (Direction.Up, distance)
-        elif 135 <= angle < 225:
-            return (Direction.Left, distance)
-        elif 225 <= angle < 315:
-            return (Direction.Down, distance)
-        return (Direction.Right, distance)
+        if 67.5 <= angle < 112.5:
+            return Direction.Up, distance
+        elif 112.5 <= angle < 157.5:
+            return Direction.TopLef, distance
+        elif 157.5 <= angle < 202.5:
+            return Direction.Left, distance
+        elif 202.5 <= angle < 247.5:
+            return Direction.DownLeft, distance
+        elif 247.5 <= angle < 292.5:
+            return Direction.Down, distance
+        elif 292.5 <= angle < 337.5:
+            return Direction.DownRight, distance
+        elif 22.5 <= angle < 67.5:
+            return Direction.TopRight, distance
+        return Direction.Right, distance
+        # raise ValueError(f'Joystick movement angle is not correct!! {angle}')
 
     def mousePressEvent(self, ev):
         self.grabCenter = self._centerEllipse().contains(ev.pos())
@@ -71,10 +84,9 @@ class Joystick(QWidget):
 
     def mouseMoveEvent(self, event):
         if self.grabCenter:
-            print("Moving")
             self.movingOffset = self._boundJoystick(event.pos())
             self.update()
-        print(self.joystickDirection())
+        self.joystickDirection()
 
 
 if __name__ == '__main__':
@@ -99,6 +111,7 @@ if __name__ == '__main__':
 
     mw.show()
     from PyQt5 import QtCore
+
     # Start Qt event loop unless running in interactive mode or using pyside.
     if (sys.flags.interactive != 1) or not hasattr(QtCore, 'PYQT_VERSION'):
         QApplication.instance().exec_()
