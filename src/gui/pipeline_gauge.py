@@ -11,8 +11,9 @@ class PipelineGauge(QWidget):
         self.value = 50  # initial value (0-100)
         self.min_value = -40
         self.max_value = 85
-        self.gauge_width = 45
-        self.gauge_height = 150
+        self.gauge_width = 25
+        self.gauge_height = 90
+        self.gauge_height = 90
 
     def paintEvent(self, event):
         painter = QPainter(self)
