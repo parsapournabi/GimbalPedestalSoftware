@@ -1,9 +1,8 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMessageBox
 from time import sleep
 
-from src.gui.mainGUI import Ui_MainWindow
+# from src.gui.mainGUI import Ui_MainWindow
 from src.gui.joystick_widget import Joystick
 from src.gui.analog_gauge import AnalogGaugeWidget
 from src.gui.pipeline_gauge import PipelineGauge
@@ -59,7 +58,7 @@ class GuiConfiguration:
     def __init__(self, ui, platform: str, is_main_window: bool = False, args=None):
         self.platform = platform
         self.window = QtWidgets.QWidget()
-        self.ui = Ui_MainWindow()
+        self.ui = ui()
         if not args:
             self.ui.setupUi(self.window)
         else:
@@ -99,8 +98,8 @@ class GuiConfiguration:
             try:
                 self.update_combobox()
 
-            except Exception:
-                pass
+            except Exception as ex:
+                _ = ex
             sleep(0.00001)
 
     def setup_font_point_size(self, parent):
@@ -179,10 +178,16 @@ class GuiConfiguration:
         self.ui.swMain.setFadeTransition(True)
 
         # First View
+        self.window.setGeometry(QtCore.QRect(0, 0, 1250, 750))
         self.page = 0
+        self.ui.frameBufferRx.setMaximumWidth(480)
+        self.ui.frameBufferRx.setMinimumWidth(480)
+        self.ui.frameBufferTx.setMinimumWidth(300)
+        self.ui.frameBufferTx.setMaximumWidth(300)
+
         self.ui.cboxUart.clear()
 
-        self.ui.joystick = Joystick()
+        self.ui.joystick = Joystick(self.ui.frameJoystick)
         self.ui.joystick.setCursor(Qt.CursorShape.OpenHandCursor)
         self.ui.v_layout_joystick.setContentsMargins(0, 0, 0, 0)
         self.ui.v_layout_joystick.addWidget(self.ui.joystick)
@@ -194,7 +199,7 @@ class GuiConfiguration:
         self.ui.gauge_pan_speed = AnalogGaugeWidget(theme=23, use_limit=False)
         self.ui.pipeline_temp_tilt = PipelineGauge()
         self.ui.pipeline_torque_tilt = PipelineGauge()
-        self.ui.gauge_tilt_speed = AnalogGaugeWidget(theme=23, use_limit=False)
+        self.ui.gauge_tilt_speed = AnalogGaugeWidget(theme=24, use_limit=False)
 
         # self.ui.v_layout_pan_gauge.setContentsMargins(50, 50, 50, 50)
         # self.ui.v_layout_tilt_gauge.setContentsMargins(50, 50, 50, 50)
@@ -208,28 +213,79 @@ class GuiConfiguration:
         self.ui.v_layout_Tilt_Torque_Gauge.addWidget(self.ui.pipeline_torque_tilt)
         self.ui.v_layout_Tilt_Speed_Gauge.addWidget(self.ui.gauge_tilt_speed)
 
+        # spacerItem = QtWidgets.QSpacerItem(0, 60, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Policy.Preferred)
+        # self.ui.verticalLayout_33.addItem(spacerItem)
+
+        # Gauges events
+        self.ui.gauge_pan.valueChanged.connect(
+            lambda: self.ui.lblPANDegreeValue.setText(f'{format(self.ui.gauge_pan.value, ".3f")}°'))
+        self.ui.gauge_pan_speed.valueChanged.connect(
+            lambda: self.ui.lblPANSpeedValue.setText(f'{format(self.ui.gauge_pan_speed.value, ".2f")}°/s'))
+        self.ui.gauge_tilt.valueChanged.connect(
+            lambda: self.ui.lblTiltDegreeValue.setText(f'{format(self.ui.gauge_tilt.value, ".3f")}°'))
+        self.ui.gauge_tilt_speed.valueChanged.connect(
+            lambda: self.ui.lblTiltSpeedValue.setText(f'{format(self.ui.gauge_tilt_speed.value, ".2f")}°/s'))
+
         # Gauges config
         self.ui.gauge_pan.minValue = -180.0
         self.ui.gauge_pan.maxValue = 180.0
         self.ui.gauge_pan.scale_angle_start_value = 90
         self.ui.gauge_pan.scale_angle_size = 360
+        self.ui.gauge_pan.updateValue(0.0)
+        self.ui.gauge_pan.update()
 
-        self.ui.gauge_tilt.minValue = -90.0
-        self.ui.gauge_tilt.maxValue = 90.0
+        self.ui.gauge_tilt.setMinValue(-180.0)
+        self.ui.gauge_tilt.setMaxValue(180.0)
+        self.ui.gauge_tilt.reverse = True
         self.ui.gauge_tilt.scale_angle_start_value = 180
-        self.ui.gauge_tilt.scale_angle_size = 90
-        self.ui.gauge_tilt.setScalaCount(4)
+        self.ui.gauge_tilt.scale_angle_size = 360
+        self.ui.gauge_tilt.setScalaCount(8)
+        self.ui.gauge_tilt.updateValue(0.0)
+        self.ui.gauge_tilt.update()
+
+        self.ui.gauge_pan_speed.minValue = 0.0
+        self.ui.gauge_pan_speed.maxValue = 600.0
+        self.ui.gauge_pan_speed.updateValue(0.0)
+        self.ui.gauge_pan_speed.update()
+
+        self.ui.gauge_tilt_speed.minValue = 0.0
+        self.ui.gauge_tilt_speed.maxValue = 600.0
+        self.ui.gauge_tilt_speed.updateValue(0.0)
+        self.ui.gauge_tilt_speed.update()
+
+        # PipeLines Config
+        self.ui.pipeline_temp_pan.min_value = 0
+        self.ui.pipeline_temp_pan.max_value = 99
+        self.ui.pipeline_torque_pan.min_value = 0
+        self.ui.pipeline_torque_pan.max_value = 100
+
+        self.ui.pipeline_temp_tilt.min_value = 0
+        self.ui.pipeline_temp_tilt.max_value = 99
+        self.ui.pipeline_torque_tilt.min_value = 0
+        self.ui.pipeline_torque_tilt.max_value = 100
+
+        # PipeLines Events
+
+        # Plain text to sliders edit Events
+        self.ui.txtSpeedPAN.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.txtSpeedTilt.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.txtGotoPositionDegreePAN.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.sliderGotoPositionDegreeTilt_2.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.txtGotoPositionSpeedPAN.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.txtGotoPositionSpeedTilt.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.txtScanSpeed.editingFinished.connect(self.plain_text_to_sliders)
+        # Plain text to range sliders edit Events
+        self.ui.txtScanPANLow.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtScanPANHigh.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtScanTiltLow.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtScanTiltHigh.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtLimitClockwisePAN.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtLimitAntiClockwisePAN.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtLimitClockwiseTilt.editingFinished.connect(self.plain_text_to_range_sliders)
+        self.ui.txtLimitAntiClockwiseTilt.editingFinished.connect(self.plain_text_to_range_sliders)
 
         # Sliders Events
         # Slider set text events
-        self.ui.sliderLimitClockwiseTilt.valueChanged.connect(
-            lambda: self.set_text_for_slider(self.ui.txtLimitClockwiseTilt))
-        self.ui.sliderLimitAntiClockwiseTilt.valueChanged.connect(
-            lambda: self.set_text_for_slider(self.ui.txtLimitAntiClockwiseTilt))
-        self.ui.sliderLimitClockwisePAN.valueChanged.connect(
-            lambda: self.set_text_for_slider(self.ui.txtLimitClockwisePAN))
-        self.ui.sliderLimitAntiClockwisePAN.valueChanged.connect(
-            lambda: self.set_text_for_slider(self.ui.txtLimitAntiClockwisePAN))
         self.ui.sliderScanSpeed.valueChanged.connect(
             lambda: self.set_text_for_slider(self.ui.txtScanSpeed, True))
         self.ui.sliderGotoPositionDegreePAN.valueChanged.connect(
@@ -245,14 +301,26 @@ class GuiConfiguration:
         self.ui.sliderSpeedTilt.valueChanged.connect(
             lambda: self.set_text_for_slider(self.ui.txtSpeedTilt, True))
         # Range Slider set text events
-        self.ui.sliderScanPAN.sliderMoved.connect(lambda: self.set_text_for_range_slider(self.ui.txtScanPAN))
-        self.ui.sliderScanTilt.sliderMoved.connect(lambda: self.set_text_for_range_slider(self.ui.txtScanTilt))
+        self.ui.sliderScanPAN.sliderMoved.connect(
+            lambda: self.set_text_for_range_slider(self.ui.txtScanPANLow, self.ui.txtScanPANHigh))
+        self.ui.sliderScanTilt.sliderMoved.connect(
+            lambda: self.set_text_for_range_slider(self.ui.txtScanTiltLow, self.ui.txtScanTiltHigh))
+        self.ui.sliderLimitClockwisePAN.sliderMoved.connect(
+            lambda: self.set_text_for_range_slider(self.ui.txtLimitAntiClockwisePAN, self.ui.txtLimitClockwisePAN))
+        self.ui.sliderLimitClockwiseTilt.sliderMoved.connect(
+            lambda: self.set_text_for_range_slider(self.ui.txtLimitClockwiseTilt,
+                                                   self.ui.txtLimitAntiClockwiseTilt))
 
-        self.ui.sliderLimitClockwisePAN.valueChanged.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_pan))
-        self.ui.sliderLimitAntiClockwisePAN.valueChanged.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_pan))
-        self.ui.sliderLimitClockwiseTilt.valueChanged.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt))
-        self.ui.sliderLimitAntiClockwiseTilt.valueChanged.connect(
-            lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt))
+        self.ui.sliderLimitClockwisePAN.sliderMoved.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_pan))
+        self.ui.sliderLimitClockwiseTilt.sliderMoved.connect(lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt))
+        self.ui.txtLimitClockwisePAN.editingFinished.connect(
+            lambda: self.limit_slider_to_gauge(self.ui.gauge_pan, self.ui.sliderLimitClockwisePAN))
+        self.ui.txtLimitAntiClockwisePAN.editingFinished.connect(
+            lambda: self.limit_slider_to_gauge(self.ui.gauge_pan, self.ui.sliderLimitClockwisePAN))
+        self.ui.txtLimitClockwiseTilt.editingFinished.connect(
+            lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt, self.ui.sliderLimitClockwiseTilt))
+        self.ui.txtLimitAntiClockwiseTilt.editingFinished.connect(
+            lambda: self.limit_slider_to_gauge(self.ui.gauge_tilt, self.ui.sliderLimitClockwiseTilt))
 
         # Slider Setting
         self.ui.sliderScanSpeed.setMinimum(0)
@@ -265,6 +333,73 @@ class GuiConfiguration:
         self.ui.sliderGotoPositionSpeedPAN.setMaximum(60000)
         self.ui.sliderGotoPositionSpeedTilt.setMinimum(0)
         self.ui.sliderGotoPositionSpeedTilt.setMaximum(60000)
+        # print('maximum', self.ui.sliderLimitAntiClockwiseTilt.minimum())
+
+        # self.ui.sliderLimitClockwiseTilt.setInvertedAppearance(True)
+
+        # Range Slider Setting
+        self.ui.txtScanPANLow.setText(str(round(self.ui.sliderScanPAN.low() / 1000, 2)))
+        self.ui.txtScanPANHigh.setText(str(round(self.ui.sliderScanPAN.high() / 1000, 2)))
+        self.ui.txtScanTiltLow.setText(str(round(self.ui.sliderScanTilt.low() / 1000, 2)))
+        self.ui.txtScanTiltHigh.setText(str(round(self.ui.sliderScanTilt.high() / 1000, 2)))
+        self.ui.txtLimitClockwiseTilt.setText(str(round(self.ui.sliderLimitClockwiseTilt.low() / 1000, 2)))
+        self.ui.txtLimitAntiClockwiseTilt.setText(str(round(self.ui.sliderLimitClockwiseTilt.high() / 1000, 2)))
+        self.ui.txtLimitAntiClockwisePAN.setText(str(round(self.ui.sliderLimitClockwisePAN.low() / 1000, 2)))
+        self.ui.txtLimitClockwisePAN.setText(str(round(self.ui.sliderLimitClockwisePAN.high() / 1000, 2)))
+
+    def plain_text_to_sliders(self):
+        sender = self.ui.MainWindow.sender()
+        dict_sender: dict = {self.ui.txtSpeedPAN: self.ui.sliderSpeedPAN,
+                             self.ui.txtSpeedTilt: self.ui.sliderSpeedTilt,
+                             self.ui.txtGotoPositionDegreePAN: self.ui.sliderGotoPositionDegreePAN,
+                             self.ui.sliderGotoPositionDegreeTilt_2: self.ui.sliderGotoPositionDegreeTilt,
+                             self.ui.txtGotoPositionSpeedPAN: self.ui.sliderGotoPositionSpeedPAN,
+                             self.ui.txtGotoPositionSpeedTilt: self.ui.sliderGotoPositionSpeedTilt,
+                             self.ui.txtScanSpeed: self.ui.sliderScanSpeed}
+        slider: QtWidgets.QSlider = dict_sender.get(sender)
+        if slider is None:
+            return
+        try:
+            if 'speed' not in sender.objectName().lower():
+                slider.setValue(int(float(sender.text()) * 1000))
+            else:
+                slider.setValue(int(float(sender.text()) * 100))
+        except Exception as ex:
+            print('Invalid text for sliders!', ex)
+            if 'speed' not in sender.objectName().lower():
+                sender.setText(str(round(slider.value() / 1000, 2)))
+            else:
+                sender.setText(str(round(slider.value() / 100, 2)))
+
+    def plain_text_to_range_sliders(self):
+        sender = self.ui.MainWindow.sender()
+        dict_sender: dict = {self.ui.txtScanPANLow: (self.ui.sliderScanPAN, False),
+                             self.ui.txtScanPANHigh: (self.ui.sliderScanPAN, True),
+                             self.ui.txtScanTiltLow: (self.ui.sliderScanTilt, False),
+                             self.ui.txtScanTiltHigh: (self.ui.sliderScanTilt, True),
+                             self.ui.txtLimitAntiClockwisePAN: (self.ui.sliderLimitClockwisePAN, False),
+                             self.ui.txtLimitClockwisePAN: (self.ui.sliderLimitClockwisePAN, True),
+                             self.ui.txtLimitClockwiseTilt: (self.ui.sliderLimitClockwiseTilt, False),
+                             self.ui.txtLimitAntiClockwiseTilt: (self.ui.sliderLimitClockwiseTilt, True)}
+        range_slider, is_high = dict_sender.get(sender)
+        if range_slider is None:
+            return
+        try:
+            value = sender.text()
+            if not range_slider.minimum() <= int(float(value) * 1000) <= range_slider.maximum():
+                raise 'Invalid text for range_sliders!'
+            if is_high:
+                range_slider.setHigh(int(float(value) * 1000))
+                sender.setText(str(round(range_slider.high() / 1000, 2)))
+            else:
+                range_slider.setLow(int(float(value) * 1000))
+                sender.setText(str(round(range_slider.low() / 1000, 2)))
+        except Exception as ex:
+            print('Invalid text for range_sliders!', ex)
+            if is_high:
+                sender.setText(str(round(range_slider.high() / 1000, 2)))
+            else:
+                sender.setText(str(round(range_slider.low() / 1000, 2)))
 
     def set_text_for_slider(self, text_edit, speed=False):
         sender: QtWidgets.QSlider = self.ui.MainWindow.sender()
@@ -273,38 +408,38 @@ class GuiConfiguration:
         else:
             text_edit.setText(str(round(sender.value() / 100, 2)))
 
-    def set_text_for_range_slider(self, text_edit):
+    def set_text_for_range_slider(self, text_edit_low, text_edit_high):
         sender: RangeSlider = self.ui.MainWindow.sender()
-        text_edit.setText(f'{round(sender.low() / 1000, 2)} {round(sender.high() / 1000, 2)}')
+        text_edit_low.setText(str(round(sender.low() / 1000, 2)))
+        text_edit_high.setText(str(round(sender.high() / 1000, 2)))
 
-    def limit_slider_to_gauge(self, gauge: AnalogGaugeWidget):
-        sender: QtWidgets.QSlider = self.ui.MainWindow.sender()
-        dict_sender: dict = {self.ui.sliderLimitClockwisePAN: (False, self.ui.sliderLimitAntiClockwisePAN),
-                             self.ui.sliderLimitAntiClockwisePAN: (True, self.ui.sliderLimitClockwisePAN),
-                             self.ui.sliderLimitClockwiseTilt: (None, self.ui.sliderLimitAntiClockwiseTilt),
-                             self.ui.sliderLimitAntiClockwiseTilt: (True, self.ui.sliderLimitClockwiseTilt)}
-        anti: bool = dict_sender.get(sender)[0]
-        brother: QtWidgets.QSlider = dict_sender.get(sender)[1]
-        minimum, maximum = min(sender.minimum(), brother.minimum()), max(sender.maximum(), brother.maximum())
-        if anti:
-            gauge.low_limit = int(self.normalize_scale_x(sender.value() / 1000,
+    def limit_slider_to_gauge(self, gauge: AnalogGaugeWidget, sender=None):
+        sender: QtWidgets.QSlider = self.ui.MainWindow.sender() if sender is None else sender
+        dict_sender: dict = {
+            self.ui.sliderLimitClockwisePAN: (self.ui.txtLimitAntiClockwisePAN, self.ui.txtLimitClockwisePAN),
+            self.ui.sliderLimitClockwiseTilt: (self.ui.txtLimitClockwiseTilt, self.ui.txtLimitAntiClockwiseTilt)}
+        low, high = dict_sender.get(sender)
+        low, high = int(float(low.text()) * 1000), int(float(high.text()) * 1000)
+        minimum, maximum = sender.minimum(), sender.maximum()
+        if sender == self.ui.sliderLimitClockwisePAN:
+            gauge.high_limit = int((180000 - high) / 1000)
+            gauge.low_limit = int(self.normalize_scale_x(low / 1000,
                                                          minimum / 1000,
                                                          maximum / 1000,
                                                          0,
                                                          gauge.scale_angle_size))
-        elif anti is False:
-            gauge.high_limit = int(self.normalize_scale_x(sender.value() / 1000,
-                                                          sender.minimum() / 1000,
-                                                          sender.maximum() / 1000,
-                                                          gauge.scale_angle_start_value,
-                                                          gauge.scale_angle_size))
-            gauge.high_limit = int(sender.value() / 1000)
-        else:
-            gauge.high_limit = int(self.normalize_scale_x(-(sender.value() / 1000),
+        elif sender == self.ui.sliderLimitClockwiseTilt:
+            gauge.low_limit = int(self.normalize_scale_x(-(high / 1000),
+                                                         minimum / 1000,
+                                                         maximum / 1000,
+                                                         0,
+                                                         gauge.scale_angle_size))
+            gauge.high_limit = int(self.normalize_scale_x(low / 1000,
                                                           minimum / 1000,
                                                           maximum / 1000,
                                                           0,
                                                           gauge.scale_angle_size))
+
         gauge.update()
 
     @staticmethod

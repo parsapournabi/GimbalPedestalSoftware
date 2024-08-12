@@ -39,8 +39,15 @@ class PipelineGauge(QWidget):
         painter.drawRoundedRect(value_rect, 10, 10)
 
     def setValue(self, value):
-        self.value = value
-        self.update()
+        value = self.normalize_scale_x(value, self.min_value, self.max_value, 0, 100)
+        if value in range(0, 101):
+            self.value = value
+            self.update()
+
+    @staticmethod
+    def normalize_scale_x(OldValue, OldMin, OldMax, NewMin, NewMax):
+        """Normalizing data"""
+        return (((OldValue - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
 
 
 if __name__ == "__main__":
@@ -53,11 +60,11 @@ if __name__ == "__main__":
     frame.setStyleSheet('''#frame {background-color: black;}''')
     # frame.setMinimumSize(2000, 1600)
     layout = QtWidgets.QHBoxLayout(frame)
-    for i in range(2):
-        gauge = PipelineGauge()
 
+    gauge = PipelineGauge()
+    gauge.setValue(100)
     # gauge.resize(50, 250)
-        layout.addWidget(gauge)
+    layout.addWidget(gauge)
     frame.show()
 
     # gauge.setValue(100)

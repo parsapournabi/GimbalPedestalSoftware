@@ -207,22 +207,25 @@ class RangeSlider(QtWidgets.QSlider):
         self.initStyleOption(opt)
 
         if self.active_slider < 0:
-            offset = new_pos - self.click_offset
-            self._high += offset
-            self._low += offset
-            if self._low < self.minimum():
-                diff = self.minimum() - self._low
-                self._low += diff
-                self._high += diff
-            if self._high > self.maximum():
-                diff = self.maximum() - self._high
-                self._low += diff
-                self._high += diff
+            pass
+            # offset = new_pos - self.click_offset
+            # self._high += offset
+            # self._low += offset
+            # if self._low < self.minimum():
+            #     diff = self.minimum() - self._low
+            #     self._low += diff
+            #     self._high += diff
+            # if self._high > self.maximum():
+            #     diff = self.maximum() - self._high
+            #     self._low += diff
+            #     self._high += diff
         elif self.active_slider == 0:
+            print(self.active_slider)
             if new_pos >= self._high:
                 new_pos = self._high - 1
             self._low = new_pos
         else:
+            print(self._low)
             if new_pos <= self._low:
                 new_pos = self._low + 1
             self._high = new_pos

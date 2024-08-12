@@ -83,7 +83,7 @@ class Communication:
         byte_14 = 'a7'
         print([byte_0, byte_1, byte_2, byte_3, byte_4, byte_5, byte_pan_speed_low, byte_pan_speed_high,
                byte_tilt_speed_low,
-               byte_tilt_speed_high, bytes_10_hex, byte_11, byte_12, checksum, byte_14])
+               byte_tilt_speed_high, bytes_10_hex, byte_11, byte_12, str_checksum, byte_14])
         return ''.join(
             [byte_0, byte_1, byte_2, byte_3, byte_4, byte_5, byte_pan_speed_low, byte_pan_speed_high,
              byte_tilt_speed_low,
@@ -530,7 +530,46 @@ class Communication:
              byte_9, byte_10, byte_11, byte_12, str_checksum, byte_14])
 
     @staticmethod
-    def parse_reading(data: list) -> dict:
+    def parse_sending_controller_buttons(string_binary_0: str, string_binary_1: str):
+        byte_0 = '7a'
+        byte_1 = '56'
+        byte_2 = '00'
+        byte_3 = '00'
+        byte_4 = '00'
+        byte_5 = '00'
+        byte_6 = '00'
+        byte_7 = '00'
+        byte_8 = '00'
+        byte_9 = '00'
+        byte_10 = "{0:0>2X}".format(int(string_binary_0, 2))
+        byte_11 = "{0:0>2X}".format(int(string_binary_1, 2))
+        byte_12 = '00'
+        data = [byte_0, byte_1, byte_2, byte_3, byte_4,
+                byte_5,
+                byte_6, byte_7, byte_8,
+                byte_9, byte_10, byte_11, byte_12]
+        print('DATA is:', data)
+        packet = [chr(int(x, 16)) for x in data]
+        checksum = 0
+        for el in packet:
+            checksum ^= ord(el)
+        str_checksum = str(hex(checksum)[2:])
+        if len(str_checksum) == 1:
+            str_checksum = '0' + str_checksum
+
+        byte_14 = 'a7'
+        print([byte_0, byte_1, byte_2, byte_3, byte_4,
+               byte_5,
+               byte_6, byte_7, byte_8,
+               byte_9, byte_10, byte_11, byte_12, str_checksum, byte_14])
+        return ''.join(
+            [byte_0, byte_1, byte_2, byte_3, byte_4,
+             byte_5,
+             byte_6, byte_7, byte_8,
+             byte_9, byte_10, byte_11, byte_12, str_checksum, byte_14])
+
+    @staticmethod
+    def parse_reading(data: list):
         """ 0- 0x7A
             1- Pan_ Degree  (Low Byte)
             2- Pan_ Degree (Mid Byte)
@@ -605,7 +644,7 @@ class Communication:
         pan_positive_limit_switch = bool(int(byte_pan_motor[3]))
         pan_negative_limit_switch = bool(int(byte_pan_motor[4]))
         pan_tracking = bool(int(byte_pan_motor[5]))
-        byte_14_bit_6 = bool(int(byte_pan_motor[6]))
+        pan_motor_temp_sign = bool(int(byte_pan_motor[6]))
         byte_14_bit_7 = bool(int(byte_pan_motor[7]))
         byte_tilt_motor = "{0:08b}".format(int(data[15], 16))[::-1]
         tilt_over_voltage = bool(int(byte_tilt_motor[0]))
@@ -614,20 +653,26 @@ class Communication:
         tilt_up_limit_switch = bool(int(byte_tilt_motor[3]))
         tilt_down_limit_switch = bool(int(byte_tilt_motor[4]))
         tilt_tracking = bool(int(byte_tilt_motor[5]))
-        byte_15_bit_6 = bool(int(byte_tilt_motor[6]))
+        tilt_motor_temp_sign = bool(int(byte_tilt_motor[6]))
         byte_15_bit_7 = bool(int(byte_tilt_motor[7]))
-        byte_16 = data[16]
-        byte_17 = data[17]
-        byte_18 = data[18]
-        packet = [chr(int(x, 16)) for x in data[:19]]
+        pan_motor_temp = data[16]
+        pan_motor_torque = data[17]
+        tilt_motor_temp = data[18]
+        tilt_motor_torque = data[19]
+        byte_20 = data[20]
+        byte_21 = data[21]
+        byte_22 = data[22]
+        packet = [chr(int(x, 16)) for x in data[:23]]
         checksum = 0
         for el in packet:
             checksum ^= ord(el)
         str_checksum = str(hex(checksum)[2:])
-        byte_20 = data[19]
+        if str_checksum != data[23]:
+            return 'Invalid Checksum'
+        byte_24 = data[24]
         dict_ret: dict = {
-            'panDegree': twos_complement(pan_degree_high_byte + pan_degree_mid_byte + pan_degree_low_byte, 16),
-            'tiltDegree': twos_complement(tilt_degree_high_byte + tilt_degree_mid_byte + tilt_degree_low_byte, 16),
+            'panDegree': twos_complement(pan_degree_high_byte + pan_degree_mid_byte + pan_degree_low_byte, 32),
+            'tiltDegree': twos_complement(tilt_degree_high_byte + tilt_degree_mid_byte + tilt_degree_low_byte, 32),
             'panSpeed': int(pan_speed_high_byte + pan_speed_low_byte, 16),
             'tiltSpeed': int(tilt_speed_high_byte + tilt_speed_low_byte, 16),
             'panMotorCurrent': int(pan_motor_current, 16),
@@ -647,6 +692,12 @@ class Communication:
             'tiltMotorEnable': tilt_motor_enable_disable,
             'tiltUpLimitSwitch': tilt_up_limit_switch,
             'tiltDownLimitSwitch': tilt_down_limit_switch,
-            'tiltTracking': tilt_tracking
+            'tiltTracking': tilt_tracking,
+            'panMotorTemp': twos_complement(pan_motor_temp, 16),
+            'panMotorTorque': twos_complement(pan_motor_torque, 16),
+            'panMotorTempSign': pan_motor_temp_sign,
+            'tiltMotorTemp': twos_complement(tilt_motor_temp, 16),
+            'tiltMotorTorque': twos_complement(tilt_motor_torque, 16),
+            'tiltMotorTempSign': tilt_motor_temp_sign
         }
         return dict_ret

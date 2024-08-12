@@ -46,6 +46,7 @@ class AnalogGaugeWidget(QWidget):
     valueChanged = Signal(int)
     low_limit: int = 0
     high_limit: int = 0
+    reverse: bool = False
 
     def __init__(self, parent=None, theme: int = 1, use_limit: bool = True):
         super(AnalogGaugeWidget, self).__init__(parent)
@@ -164,15 +165,15 @@ class AnalogGaugeWidget(QWidget):
         # DEFAULT SCALE TEXT STATUS
         ################################################################################################
         self.setEnableScaleText(True)
-        self.scale_fontname = "Orbitron"
-        self.initial_scale_fontsize = 14
+        self.scale_fontname = "Arial"
+        self.initial_scale_fontsize = 21
         self.scale_fontsize = self.initial_scale_fontsize
 
         ################################################################################################
         # DEFAULT VALUE TEXT STATUS
         ################################################################################################
         self.enable_value_text = True
-        self.value_fontname = "Orbitron"
+        self.value_fontname = "Arial"
         self.initial_value_fontsize = 40
         self.value_fontsize = self.initial_value_fontsize
         self.text_radius_factor = 0.5
@@ -1009,7 +1010,7 @@ class AnalogGaugeWidget(QWidget):
 
     ################################################################################################
     # SET SCALE POLYGON COLOR
-    ################################################################################################
+    ###############################################################################################V#
     def set_scale_polygon_colors(self, color_array):
         if 'list' in str(type(color_array)):
             self.scale_polygon_colors = color_array
@@ -1191,6 +1192,7 @@ class AnalogGaugeWidget(QWidget):
         scale_per_div = int((self.maxValue - self.minValue) / self.scalaCount)
 
         angle_distance = (float(self.scale_angle_size) / float(self.scalaCount))
+
         for i in range(self.scalaCount + 1):
             # text = str(int((self.maxValue - self.minValue) / self.scalaCount * i))
             text = str(int(self.minValue + scale_per_div * i))
@@ -1201,12 +1203,16 @@ class AnalogGaugeWidget(QWidget):
             x = text_radius * math.cos(math.radians(angle))
             y = text_radius * math.sin(math.radians(angle))
 
-            text = [x - int(w / 2), y - int(h / 2), int(w), int(h), Qt.AlignCenter, text]
-            if self.scale_angle_start_value == 90 and self.scale_angle_size == 360:
+            if self.reverse:
+                text = [x - int(w / 2), y - int(h / 2), int(w), int(h), Qt.AlignCenter, str(-int(text))]
+            else:
+                text = [x - int(w / 2), y - int(h / 2), int(w), int(h), Qt.AlignCenter, text]
+            if self.scale_angle_start_value == 90 or self.scale_angle_start_value == 180 and self.scale_angle_size == 360:
                 if text[5] != '180':
                     painter.drawText(int(text[0]), int(text[1]), text[2], text[3], text[4], text[5])
             else:
                 painter.drawText(int(text[0]), int(text[1]), text[2], text[3], text[4], text[5])
+
         # painter.restore()
 
     ################################################################################################
@@ -1262,7 +1268,8 @@ class AnalogGaugeWidget(QWidget):
 
         # angle_distance = (float(self.scale_angle_size) / float(self.scalaCount))
         # for i in range(self.scalaCount + 1):
-        text = str(round(self.value, 2))
+        # text = str(round(self.value, 2))
+        text = ''
         w = fm.width(text) + 1
         h = fm.height()
         painter.setFont(QFont(self.value_fontname, int(self.value_fontsize), QFont.Bold))
@@ -1476,44 +1483,44 @@ class AnalogGaugeWidget(QWidget):
         self.NeedleColor = self.NeedleColorReleased
         self.update()
 
-    def mouseMoveEvent(self, event):
-        x, y = event.x() - (self.width() / 2), event.y() - (self.height() / 2)
-        if not x == 0:
-            angle = math.atan2(y, x) / math.pi * 180
-            # winkellaenge der anzeige immer positiv 0 - 360deg
-            # min wert + umskalierter wert
-            value = (float(math.fmod(angle - self.scale_angle_start_value + 720, 360)) / \
-                     (float(self.scale_angle_size) / float(self.maxValue - self.minValue))) + self.minValue
-            temp = value
-            fmod = float(math.fmod(angle - self.scale_angle_start_value + 720, 360))
-            state = 0
-            if (self.value - (self.maxValue - self.minValue) * self.valueNeedleSnapzone) <= \
-                    value <= \
-                    (self.value + (self.maxValue - self.minValue) * self.valueNeedleSnapzone):
-                self.NeedleColor = self.NeedleColorDrag
-                # todo: evtl ueberpruefen
-                #
-                state = 9
-                # if value >= self.maxValue and self.last_value < (self.maxValue - self.minValue) / 2:
-                if value >= self.maxValue and self.last_value < (self.maxValue - self.minValue) / 2:
-                    state = 1
-                    value = self.maxValue
-                    self.last_value = self.minValue
-                    self.valueChanged.emit(int(value))
-
-                elif value >= self.maxValue >= self.last_value:
-                    state = 2
-                    value = self.maxValue
-                    self.last_value = self.maxValue
-                    self.valueChanged.emit(int(value))
-
-
-                else:
-                    state = 3
-                    self.last_value = value
-                    self.valueChanged.emit(int(value))
-
-                self.updateValue(value)
+    # def mouseMoveEvent(self, event):
+    #     x, y = event.x() - (self.width() / 2), event.y() - (self.height() / 2)
+    #     if not x == 0:
+    #         angle = math.atan2(y, x) / math.pi * 180
+    #         # winkellaenge der anzeige immer positiv 0 - 360deg
+    #         # min wert + umskalierter wert
+    #         value = (float(math.fmod(angle - self.scale_angle_start_value + 720, 360)) / \
+    #                  (float(self.scale_angle_size) / float(self.maxValue - self.minValue))) + self.minValue
+    #         temp = value
+    #         fmod = float(math.fmod(angle - self.scale_angle_start_value + 720, 360))
+    #         state = 0
+    #         if (self.value - (self.maxValue - self.minValue) * self.valueNeedleSnapzone) <= \
+    #                 value <= \
+    #                 (self.value + (self.maxValue - self.minValue) * self.valueNeedleSnapzone):
+    #             self.NeedleColor = self.NeedleColorDrag
+    #             # todo: evtl ueberpruefen
+    #             #
+    #             state = 9
+    #             # if value >= self.maxValue and self.last_value < (self.maxValue - self.minValue) / 2:
+    #             if value >= self.maxValue and self.last_value < (self.maxValue - self.minValue) / 2:
+    #                 state = 1
+    #                 value = self.maxValue
+    #                 self.last_value = self.minValue
+    #                 self.valueChanged.emit(int(value))
+    #
+    #             elif value >= self.maxValue >= self.last_value:
+    #                 state = 2
+    #                 value = self.maxValue
+    #                 self.last_value = self.maxValue
+    #                 self.valueChanged.emit(int(value))
+    #
+    #
+    #             else:
+    #                 state = 3
+    #                 self.last_value = value
+    #                 self.valueChanged.emit(int(value))
+    #
+    #             self.updateValue(value)
 
             ################################################################################################
 
