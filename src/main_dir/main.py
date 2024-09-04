@@ -10,6 +10,7 @@ from src.gui.joystick_widget import Direction
 from src.communication.controller import Controller
 from src.gui import imagesresources_rc
 
+from math import ceil
 from PyQt5 import QtWidgets, QtGui
 from time import sleep
 
@@ -484,8 +485,9 @@ class Main:
                                     Direction.DownRight: self.keypad_rb,
                                     Direction.DownLeft: self.keypad_lb}
             direction, distance = self.ui.joystick.joystickDirection()
-            func = dict_direction.get(direction)
-            func(distance)
+            if distance != 1.0:
+                func = dict_direction.get(direction)
+                func(distance)
 
         except Exception as ex:
             print(f'Exception at joystick_movement {ex}')
@@ -512,8 +514,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=0,
                     pan_on=0,
@@ -522,8 +524,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=0,
                     pan_on=0,
@@ -539,8 +541,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=1,
                     pan_on=0,
@@ -549,8 +551,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=1,
                     pan_on=0,
@@ -566,8 +568,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=0,
                     pan_on=1,
@@ -576,8 +578,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=0,
                     pan_on=1,
@@ -593,8 +595,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=1,
                     tilt_dir=0,
                     pan_on=1,
@@ -603,8 +605,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=1,
                     tilt_dir=0,
                     pan_on=1,
@@ -621,8 +623,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=0,
                     pan_on=1,
@@ -631,8 +633,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=0,
                     pan_on=1,
@@ -649,8 +651,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=1,
                     pan_on=1,
@@ -659,8 +661,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=0,
                     tilt_dir=1,
                     pan_on=1,
@@ -677,8 +679,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=1,
                     tilt_dir=0,
                     pan_on=1,
@@ -687,8 +689,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=1,
                     tilt_dir=0,
                     pan_on=1,
@@ -705,8 +707,8 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=1,
                     tilt_dir=1,
                     pan_on=1,
@@ -715,8 +717,8 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_joystick_movement(
-                    pan_speed=int(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
-                    tilt_speed=int(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
+                    pan_speed=ceil(float(self.ui.txtSpeedPAN.text()) * 100 * distance),
+                    tilt_speed=ceil(float(self.ui.txtSpeedTilt.text()) * 100 * distance),
                     pan_dir=1,
                     tilt_dir=1,
                     pan_on=1,
@@ -761,10 +763,10 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_goto_position(
-                    pan_degree=abs(int(float(self.ui.txtGotoPositionDegreePAN.text()) * 100)),
-                    tilt_degree=abs(int(float(self.ui.sliderGotoPositionDegreeTilt_2.text()) * 100)),
-                    pan_speed=int(float(self.ui.txtGotoPositionSpeedPAN.text()) * 100),
-                    tilt_speed=int(float(self.ui.txtGotoPositionSpeedTilt.text()) * 100),
+                    pan_degree=ceil(abs(float(self.ui.txtGotoPositionDegreePAN.text()) * 100)),
+                    tilt_degree=ceil(abs(float(self.ui.sliderGotoPositionDegreeTilt_2.text()) * 100)),
+                    pan_speed=ceil(float(self.ui.txtGotoPositionSpeedPAN.text()) * 100),
+                    tilt_speed=ceil(float(self.ui.txtGotoPositionSpeedTilt.text()) * 100),
                     pan_goto_position_on=int(self.ui.cbPANGotoPosition.isChecked()),
                     tilt_goto_position_on=int(self.ui.cbTiltGotoPosition.isChecked()),
                     pan_dir=1 if int(float(self.ui.txtGotoPositionDegreePAN.text()) * 100) >= 0 else 0,
@@ -773,10 +775,10 @@ class Main:
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_goto_position(
-                    pan_degree=abs(int(float(self.ui.txtGotoPositionDegreePAN.text()) * 100)),
-                    tilt_degree=abs(int(float(self.ui.sliderGotoPositionDegreeTilt_2.text()) * 100)),
-                    pan_speed=int(float(self.ui.txtGotoPositionSpeedPAN.text()) * 100),
-                    tilt_speed=int(float(self.ui.txtGotoPositionSpeedTilt.text()) * 100),
+                    pan_degree=ceil(abs(float(self.ui.txtGotoPositionDegreePAN.text()) * 100)),
+                    tilt_degree=ceil(abs(float(self.ui.sliderGotoPositionDegreeTilt_2.text()) * 100)),
+                    pan_speed=ceil(float(self.ui.txtGotoPositionSpeedPAN.text()) * 100),
+                    tilt_speed=ceil(float(self.ui.txtGotoPositionSpeedTilt.text()) * 100),
                     pan_goto_position_on=int(self.ui.cbPANGotoPosition.isChecked()),
                     tilt_goto_position_on=int(self.ui.cbTiltGotoPosition.isChecked()),
                     pan_dir=1 if int(float(self.ui.txtGotoPositionDegreePAN.text()) * 100) >= 0 else 0,
@@ -811,38 +813,38 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_assign_limitation(
-                    pan_degree_right=abs(int(float(self.ui.txtLimitClockwisePAN.text()) * 100)),
-                    pan_degree_left=abs(int(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100)),
-                    tilt_degree_up=abs(int(float(
-                        self.ui.txtLimitClockwiseTilt.text()) * 100)),
-                    tilt_degree_down=abs(int(float(
+                    pan_degree_right=ceil(abs(float(self.ui.txtLimitClockwisePAN.text()) * 100)),
+                    pan_degree_left=ceil(abs(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100)),
+                    tilt_degree_up=ceil(abs(float(
                         self.ui.txtLimitAntiClockwiseTilt.text()) * 100)),
+                    tilt_degree_down=ceil(abs(float(
+                        self.ui.txtLimitClockwiseTilt.text()) * 100)),
                     pan_limit_on=0 if abs(int(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100)) == 18000 and abs(
                         int(float(self.ui.txtLimitClockwisePAN.text()) * 100)) == 0 else 1,
                     tilt_limit_on=0 if abs(int(float(self.ui.txtLimitClockwiseTilt.text()) * 100)) == 9000 and abs(
                         int(float(self.ui.txtLimitAntiClockwiseTilt.text()) * 100)) == 9000 else 1,
                     pan_dir_right=1 if int(float(self.ui.txtLimitClockwisePAN.text()) * 100) >= 0 else 0,
                     pan_dir_left=1 if int(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100) >= 0 else 0,
-                    tilt_dir_up=1 if int(float(self.ui.txtLimitClockwiseTilt.text()) * 100) >= 0 else 0,
-                    tilt_dir_down=1 if int(float(self.ui.txtLimitAntiClockwiseTilt.text()) * 100) >= 0 else 0)
+                    tilt_dir_up=1 if int(float(self.ui.txtLimitAntiClockwiseTilt.text()) * 100) >= 0 else 0,
+                    tilt_dir_down=1 if int(float(self.ui.txtLimitClockwiseTilt.text()) * 100) >= 0 else 0)
                 self.tx_label(hex_str)
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_assign_limitation(
-                    pan_degree_right=abs(int(float(self.ui.txtLimitClockwisePAN.text()) * 100)),
-                    pan_degree_left=abs(int(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100)),
-                    tilt_degree_up=abs(int(float(
-                        self.ui.txtLimitClockwiseTilt.text()) * 100)),
-                    tilt_degree_down=abs(int(float(
+                    pan_degree_right=ceil(abs(float(self.ui.txtLimitClockwisePAN.text()) * 100)),
+                    pan_degree_left=ceil(abs(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100)),
+                    tilt_degree_up=ceil(abs(float(
                         self.ui.txtLimitAntiClockwiseTilt.text()) * 100)),
+                    tilt_degree_down=ceil(abs(float(
+                        self.ui.txtLimitClockwiseTilt.text()) * 100)),
                     pan_limit_on=0 if abs(int(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100)) == 18000 and abs(
                         int(float(self.ui.txtLimitClockwisePAN.text()) * 100)) == 0 else 1,
                     tilt_limit_on=0 if abs(int(float(self.ui.txtLimitClockwiseTilt.text()) * 100)) == 9000 and abs(
                         int(float(self.ui.txtLimitAntiClockwiseTilt.text()) * 100)) == 9000 else 1,
                     pan_dir_right=1 if int(float(self.ui.txtLimitClockwisePAN.text()) * 100) >= 0 else 0,
                     pan_dir_left=1 if int(float(self.ui.txtLimitAntiClockwisePAN.text()) * 100) >= 0 else 0,
-                    tilt_dir_up=1 if int(float(self.ui.txtLimitClockwiseTilt.text()) * 100) >= 0 else 0,
-                    tilt_dir_down=1 if int(float(self.ui.txtLimitAntiClockwiseTilt.text()) * 100) >= 0 else 0)
+                    tilt_dir_up=1 if int(float(self.ui.txtLimitAntiClockwiseTilt.text()) * 100) >= 0 else 0,
+                    tilt_dir_down=1 if int(float(self.ui.txtLimitClockwiseTilt.text()) * 100) >= 0 else 0)
                 self.tx_label(hex_str)
                 print('Writing data', self.server.client_connected.send(bytes.fromhex(hex_str)))
 
@@ -874,32 +876,32 @@ class Main:
         try:
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_scan_mode(
-                    pan_degree_right=abs(int(float(self.ui.txtScanPANHigh.text()) * 100)),
-                    pan_degree_left=abs(int(float(self.ui.txtScanPANLow.text()) * 100)),
-                    tilt_degree_up=abs(int(float(self.ui.txtScanTiltHigh.text()) * 100)),
-                    tilt_degree_down=abs(int(float(self.ui.txtScanTiltLow.text()) * 100)),
+                    pan_degree_right=ceil(abs(float(self.ui.txtScanPANHigh.text()) * 100)),
+                    pan_degree_left=ceil(abs(float(self.ui.txtScanPANLow.text()) * 100)),
+                    tilt_degree_up=ceil(abs(float(self.ui.txtScanTiltHigh.text()) * 100)),
+                    tilt_degree_down=ceil(abs(float(self.ui.txtScanTiltLow.text()) * 100)),
                     pan_scan_on=int(self.ui.cbPANScan.isChecked()),
                     tilt_scan_on=int(self.ui.cbTiltScan.isChecked()),
                     pan_dir_right=1 if int(float(self.ui.txtScanPANHigh.text()) * 100) >= 0 else 0,
                     pan_dir_left=1 if int(float(self.ui.txtScanPANLow.text()) * 100) >= 0 else 0,
                     tilt_dir_up=1 if int(float(self.ui.txtScanTiltHigh.text()) * 100) >= 0 else 0,
                     tilt_dir_down=1 if int(float(self.ui.txtScanTiltLow.text()) * 100) >= 0 else 0,
-                    scan_speed=int(float(self.ui.txtScanSpeed.text()) * 100))
+                    scan_speed=ceil(float(self.ui.txtScanSpeed.text()) * 100))
                 self.tx_label(hex_str)
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_scan_mode(
-                    pan_degree_right=abs(int(float(self.ui.txtScanPANHigh.text()) * 100)),
-                    pan_degree_left=abs(int(float(self.ui.txtScanPANLow.text()) * 100)),
-                    tilt_degree_up=abs(int(float(self.ui.txtScanTiltHigh.text()) * 100)),
-                    tilt_degree_down=abs(int(float(self.ui.txtScanTiltLow.text()) * 100)),
+                    pan_degree_right=ceil(abs(float(self.ui.txtScanPANHigh.text()) * 100)),
+                    pan_degree_left=ceil(abs(float(self.ui.txtScanPANLow.text()) * 100)),
+                    tilt_degree_up=ceil(abs(float(self.ui.txtScanTiltHigh.text()) * 100)),
+                    tilt_degree_down=ceil(abs(float(self.ui.txtScanTiltLow.text()) * 100)),
                     pan_scan_on=int(self.ui.cbPANScan.isChecked()),
                     tilt_scan_on=int(self.ui.cbTiltScan.isChecked()),
                     pan_dir_right=1 if int(float(self.ui.txtScanPANHigh.text()) * 100) >= 0 else 0,
                     pan_dir_left=1 if int(float(self.ui.txtScanPANLow.text()) * 100) >= 0 else 0,
                     tilt_dir_up=1 if int(float(self.ui.txtScanTiltHigh.text()) * 100) >= 0 else 0,
                     tilt_dir_down=1 if int(float(self.ui.txtScanTiltLow.text()) * 100) >= 0 else 0,
-                    scan_speed=int(float(self.ui.txtScanSpeed.text()) * 100))
+                    scan_speed=ceil(float(self.ui.txtScanSpeed.text()) * 100))
                 self.tx_label(hex_str)
                 print('Writing data', self.server.client_connected.send(bytes.fromhex(hex_str)))
 
@@ -922,14 +924,14 @@ class Main:
                                   9: self.ui.txtSettingFloat_10}
             if self.sp.connected:
                 hex_str = self.sp.parse_sending_numbers(
-                    number=abs(int(float(dict_numbers.get(which_number).text()) * 1000)),
+                    number=ceil(abs(float(dict_numbers.get(which_number).text()) * 1000)),
                     which_number=which_number,
                     sign_number=0 if int(float(dict_numbers.get(which_number).text()) * 1000) < 0 else 1)
                 self.tx_label(hex_str)
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
                 hex_str = self.server.parse_sending_numbers(
-                    number=abs(int(float(dict_numbers.get(which_number).text()) * 1000)),
+                    number=ceil(abs(float(dict_numbers.get(which_number).text()) * 1000)),
                     which_number=which_number,
                     sign_number=0 if int(float(dict_numbers.get(which_number).text()) * 1000) < 0 else 1)
                 self.tx_label(hex_str)

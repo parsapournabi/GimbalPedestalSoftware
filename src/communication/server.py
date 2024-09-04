@@ -14,6 +14,14 @@ class ServerSocket(Communication):
         self.connected = False
         self.timeout = False
         try:
+            host = self.host.split('.')
+            new_host = []
+            for h in host:
+                if h[0] == '0':
+                    h = h[1:]
+                new_host.append(h)
+            self.host = '.'.join(new_host)
+            print(self.host)
             self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.server.bind((self.host, self.port))
             self.server.listen(3)
