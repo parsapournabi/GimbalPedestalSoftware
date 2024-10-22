@@ -141,6 +141,7 @@ class Main:
         self.ui.btnRefrence.clicked.connect(self.go_to_reference)
         self.ui.btnSetLimit.clicked.connect(self.assign_limitation)
         self.ui.btnScan.clicked.connect(self.scan_mode)
+        # self.ui.btnScanStop.clicked.connect(self.scan_mode_stop)
         self.ui.btnSettingCustomSend_1.clicked.connect(lambda: self.send_numbers(0))
         self.ui.btnSettingCustomSend_2.clicked.connect(lambda: self.send_numbers(1))
         self.ui.btnSettingCustomSend_3.clicked.connect(lambda: self.send_numbers(2))
@@ -327,8 +328,8 @@ class Main:
                                                         resp_parse['panSpeed'] / 100)
                 self.thread_main_worker.set_gauge_value(self.ui.gauge_tilt_speed,
                                                         resp_parse['tiltSpeed'] / 100)
-                self.thread_main_worker.set_text(self.ui.lblPANSpeedValue, str(resp_parse['panSpeed'] / 100))
-                self.thread_main_worker.set_text(self.ui.lblTiltSpeedValue, str(resp_parse['tiltSpeed'] / 100))
+                # self.thread_main_worker.set_text(self.ui.lblPANSpeedValue, str(resp_parse['panSpeed'] / 100))
+                # self.thread_main_worker.set_text(self.ui.lblTiltSpeedValue, str(resp_parse['tiltSpeed'] / 100))
 
                 self.thread_main_worker.set_value(self.ui.pipeline_temp_pan,
                                                   resp_parse['panMotorTemp'] if resp_parse['panMotorTempSign'] else -
