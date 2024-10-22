@@ -252,12 +252,12 @@ class GuiConfiguration:
         self.ui.gauge_tilt.update()
 
         self.ui.gauge_pan_speed.minValue = 0.0
-        self.ui.gauge_pan_speed.maxValue = 200.0
+        self.ui.gauge_pan_speed.maxValue = 150.0
         self.ui.gauge_pan_speed.updateValue(0.0)
         self.ui.gauge_pan_speed.update()
 
         self.ui.gauge_tilt_speed.minValue = 0.0
-        self.ui.gauge_tilt_speed.maxValue = 100.0
+        self.ui.gauge_tilt_speed.maxValue = 75.0
         self.ui.gauge_tilt_speed.updateValue(0.0)
         self.ui.gauge_tilt_speed.update()
 
@@ -282,6 +282,7 @@ class GuiConfiguration:
         self.ui.txtGotoPositionSpeedPAN.editingFinished.connect(self.plain_text_to_sliders)
         self.ui.txtGotoPositionSpeedTilt.editingFinished.connect(self.plain_text_to_sliders)
         self.ui.txtScanSpeed.editingFinished.connect(self.plain_text_to_sliders)
+        self.ui.txtScanSpeedTilt.editingFinished.connect(self.plain_text_to_sliders)
         # Plain text to range sliders edit Events
         self.ui.txtScanPANLow.editingFinished.connect(self.plain_text_to_range_sliders)
         self.ui.txtScanPANHigh.editingFinished.connect(self.plain_text_to_range_sliders)
@@ -296,6 +297,8 @@ class GuiConfiguration:
         # Slider set text events
         self.ui.sliderScanSpeed.valueChanged.connect(
             lambda: self.set_text_for_slider(self.ui.txtScanSpeed, True))
+        self.ui.sliderScanSpeedTilt.valueChanged.connect(
+            lambda: self.set_text_for_slider(self.ui.txtScanSpeedTilt, True))
         self.ui.sliderGotoPositionDegreePAN.valueChanged.connect(
             lambda: self.set_text_for_slider(self.ui.txtGotoPositionDegreePAN))
         self.ui.sliderGotoPositionDegreeTilt.valueChanged.connect(
@@ -332,15 +335,17 @@ class GuiConfiguration:
 
         # Slider Setting
         self.ui.sliderScanSpeed.setMinimum(0)
-        self.ui.sliderScanSpeed.setMaximum(10000)
+        self.ui.sliderScanSpeed.setMaximum(15000)
+        self.ui.sliderScanSpeedTilt.setMinimum(0)
+        self.ui.sliderScanSpeedTilt.setMaximum(7500)
         self.ui.sliderSpeedPAN.setMinimum(0)
-        self.ui.sliderSpeedPAN.setMaximum(20000)
+        self.ui.sliderSpeedPAN.setMaximum(15000)
         self.ui.sliderSpeedTilt.setMinimum(0)
-        self.ui.sliderSpeedTilt.setMaximum(10000)
+        self.ui.sliderSpeedTilt.setMaximum(7500)
         self.ui.sliderGotoPositionSpeedPAN.setMinimum(0)
-        self.ui.sliderGotoPositionSpeedPAN.setMaximum(20000)
+        self.ui.sliderGotoPositionSpeedPAN.setMaximum(15000)
         self.ui.sliderGotoPositionSpeedTilt.setMinimum(0)
-        self.ui.sliderGotoPositionSpeedTilt.setMaximum(10000)
+        self.ui.sliderGotoPositionSpeedTilt.setMaximum(7500)
 
         # print('maximum', self.ui.sliderLimitAntiClockwiseTilt.minimum())
 
@@ -367,7 +372,8 @@ class GuiConfiguration:
                              self.ui.sliderGotoPositionDegreeTilt_2: self.ui.sliderGotoPositionDegreeTilt,
                              self.ui.txtGotoPositionSpeedPAN: self.ui.sliderGotoPositionSpeedPAN,
                              self.ui.txtGotoPositionSpeedTilt: self.ui.sliderGotoPositionSpeedTilt,
-                             self.ui.txtScanSpeed: self.ui.sliderScanSpeed}
+                             self.ui.txtScanSpeed: self.ui.sliderScanSpeed,
+                             self.ui.txtScanSpeedTilt: self.ui.sliderScanSpeedTilt}
         slider: QtWidgets.QSlider = dict_sender.get(sender)
         if slider is None:
             return

@@ -206,19 +206,19 @@ class Ui_MainWindow(object):
                                  "QSlider::handle:horizontal:pressed {\n"
                                  "    background-color: #2c313c;\n"
                                  "}\n"
-                                 "#sliderGotoPositionSpeedTilt::add-page:horizontal,#sliderGotoPositionSpeedPAN::add-page:horizontal, #sliderSpeedTilt::add-page:horizontal, #sliderSpeedPAN::add-page:horizontal, #sliderScanSpeed::add-page:horizontal{\n"
+                                 "#sliderGotoPositionSpeedTilt::add-page:horizontal,#sliderGotoPositionSpeedPAN::add-page:horizontal, #sliderSpeedTilt::add-page:horizontal, #sliderSpeedPAN::add-page:horizontal, #sliderScanSpeed::add-page:horizontal, #sliderScanSpeedTilt::add-page:horizontal{\n"
                                  "    background-color: #838ea2;\n"
                                  "}\n"
-                                 "#sliderGotoPositionSpeedTilt::groove:horizontal:hover, #sliderGotoPositionSpeedPAN::groove:horizontal:hover, #sliderSpeedTilt::groove:horizontal:hover, #sliderSpeedPAN::groove:horizontal:hover, #sliderScanSpeed::groove:horizontal:hover {\n"
+                                 "#sliderGotoPositionSpeedTilt::groove:horizontal:hover, #sliderGotoPositionSpeedPAN::groove:horizontal:hover, #sliderSpeedTilt::groove:horizontal:hover, #sliderSpeedPAN::groove:horizontal:hover, #sliderScanSpeed::groove:horizontal:hover, #sliderScanSpeedTilt::groove:horizontal:hover {\n"
                                  "    background-color: #16191d;\n"
                                  "}\n"
-                                 "#sliderGotoPositionSpeedTilt::groove:horizontal, #sliderGotoPositionSpeedPAN::groove:horizontal, #sliderSpeedTilt::groove:horizontal, #sliderSpeedPAN::groove:horizontal, #sliderScanSpeed::groove:horizontal {\n"
+                                 "#sliderGotoPositionSpeedTilt::groove:horizontal, #sliderGotoPositionSpeedPAN::groove:horizontal, #sliderSpeedTilt::groove:horizontal, #sliderSpeedPAN::groove:horizontal, #sliderScanSpeed::groove:horizontal, #sliderScanSpeedTilt::groove:horizontal {\n"
                                  "    border-radius: 3px;\n"
                                  "    height: 10px;\n"
                                  "    margin: 0px;\n"
                                  "    background-color: #16191d;\n"
                                  "}\n"
-                                 "#sliderGotoPositionSpeedTilt::handle:horizontal, #sliderGotoPositionSpeedPAN::handle:horizontal, #sliderSpeedTilt::handle:horizontal, #sliderSpeedPAN::handle:horizontal, #sliderScanSpeed::handle:horizontal {\n"
+                                 "#sliderGotoPositionSpeedTilt::handle:horizontal, #sliderGotoPositionSpeedPAN::handle:horizontal, #sliderSpeedTilt::handle:horizontal, #sliderSpeedPAN::handle:horizontal, #sliderScanSpeed::handle:horizontal, #sliderScanSpeedTilt::handle:horizontal {\n"
                                  "    background-color: rgb(215, 215, 215);\n"
                                  "}\n"
                                  "QPlainTextEdit {\n"
@@ -1925,6 +1925,48 @@ class Ui_MainWindow(object):
         self.sliderScanSpeed.setObjectName("sliderScanSpeed")
         self.verticalLayout_21.addWidget(self.sliderScanSpeed)
         self.verticalLayout_18.addWidget(self.frameSpeedScan)
+
+        self.frameSpeedScanTilt = QtWidgets.QFrame(self.gbScan)
+        self.frameSpeedScanTilt.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frameSpeedScanTilt.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frameSpeedScanTilt.setObjectName("frameSpeedScanTilt")
+        self.verticalLayout_210 = QtWidgets.QVBoxLayout(self.frameSpeedScanTilt)
+        self.verticalLayout_210.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_210.setSpacing(1)
+        self.verticalLayout_210.setObjectName("verticalLayout_210")
+        self.label_310 = QtWidgets.QLabel(self.frameSpeedScanTilt)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(9)
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_310.setFont(font)
+        self.label_310.setAlignment(QtCore.Qt.AlignLeading | QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        self.label_310.setObjectName("label_310")
+
+        self.verticalLayout_210.addWidget(self.label_310)
+        self.txtScanSpeedTilt = QtWidgets.QLineEdit(self.frameSpeedScanTilt)
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(10)
+        self.txtScanSpeedTilt.setFont(font)
+        self.txtScanSpeedTilt.setObjectName("txtScanSpeedTilt")
+        self.verticalLayout_210.addWidget(self.txtScanSpeedTilt)
+        self.sliderScanSpeedTilt = QtWidgets.QSlider(self.frameSpeedScanTilt)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.sliderScanSpeedTilt.sizePolicy().hasHeightForWidth())
+        self.sliderScanSpeedTilt.setSizePolicy(sizePolicy)
+        self.sliderScanSpeedTilt.setMinimum(0)
+        self.sliderScanSpeedTilt.setMaximum(200)
+        self.sliderScanSpeedTilt.setOrientation(QtCore.Qt.Horizontal)
+        self.sliderScanSpeedTilt.setTickPosition(QtWidgets.QSlider.NoTicks)
+        self.sliderScanSpeedTilt.setTickInterval(1)
+        self.sliderScanSpeedTilt.setObjectName("sliderScanSpeedTilt")
+        self.verticalLayout_210.addWidget(self.sliderScanSpeedTilt)
+        self.verticalLayout_18.addWidget(self.frameSpeedScanTilt)
+
         self.cbPANScan = QtWidgets.QCheckBox(self.gbScan)
         font = QtGui.QFont()
         font.setFamily("Arial")
@@ -3338,7 +3380,8 @@ class Ui_MainWindow(object):
         self.label_30.setText(_translate("MainWindow", "Tilt °"))
         self.txtScanTiltLow.setText(_translate("MainWindow", "90.000"))
         self.txtScanTiltHigh.setText(_translate("MainWindow", "90.000"))
-        self.label_31.setText(_translate("MainWindow", "Speed (°/s)"))
+        self.label_31.setText(_translate("MainWindow", "PAN Speed (°/s)"))
+        self.label_310.setText(_translate("MainWindow", "Tilt Speed (°/s)"))
         self.txtScanSpeed.setText(_translate("MainWindow", "0.000"))
         self.cbPANScan.setText(_translate("MainWindow", "PAN Scan"))
         self.cbTiltScan.setText(_translate("MainWindow", "Tilt Scan"))
