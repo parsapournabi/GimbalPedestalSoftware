@@ -385,7 +385,8 @@ class Communication:
                                 pan_dir_left: int,
                                 tilt_dir_up: int,
                                 tilt_dir_down: int,
-                                scan_speed: int) -> str:
+                                scan_speed_pan: int,
+                                scan_speed_tilt: int) -> str:
         """
         0- x7A
         1- 0x06
@@ -430,13 +431,12 @@ class Communication:
         byte_10_bits = str(0) + str(tilt_dir_down) + str(tilt_dir_up) + str(pan_dir_left) + str(pan_dir_right) + str(
             tilt_scan_on) + str(pan_scan_on) + str(0)
         bytes_10_hex = "{0:0>2X}".format(int(byte_10_bits, 2))
-        scan_speed_hex = "{0:#0{1}x}".format(scan_speed, 6)[2:]
-        byte_scan_speed_high = scan_speed_hex[:2]
-        byte_scan_speed_low = scan_speed_hex[2:]
+        byte_scan_speed_pan = "{0:#0{1}x}".format(scan_speed_pan, 4)[2:]
+        byte_scan_speed_tilt = "{0:#0{1}x}".format(scan_speed_tilt, 4)[2:]
         data = [byte_0, byte_1, byte_pan_degree_right_low, byte_pan_degree_right_high, byte_pan_degree_left_low,
                 byte_pan_degree_left_high,
                 byte_tilt_degree_up_low, byte_tilt_degree_up_high, byte_tilt_degree_down_low,
-                byte_tilt_degree_down_high, bytes_10_hex, byte_scan_speed_low, byte_scan_speed_high]
+                byte_tilt_degree_down_high, bytes_10_hex, byte_scan_speed_pan, byte_scan_speed_tilt]
         print('DATA is:', data)
         packet = [chr(int(x, 16)) for x in data]
         checksum = 0
@@ -450,13 +450,13 @@ class Communication:
         print([byte_0, byte_1, byte_pan_degree_right_low, byte_pan_degree_right_high, byte_pan_degree_left_low,
                byte_pan_degree_left_high,
                byte_tilt_degree_up_low, byte_tilt_degree_up_high, byte_tilt_degree_down_low,
-               byte_tilt_degree_down_high, bytes_10_hex, byte_scan_speed_low, byte_scan_speed_high, str_checksum,
+               byte_tilt_degree_down_high, bytes_10_hex, byte_scan_speed_pan, byte_scan_speed_tilt, str_checksum,
                byte_14])
         return ''.join(
             [byte_0, byte_1, byte_pan_degree_right_low, byte_pan_degree_right_high, byte_pan_degree_left_low,
              byte_pan_degree_left_high,
              byte_tilt_degree_up_low, byte_tilt_degree_up_high, byte_tilt_degree_down_low,
-             byte_tilt_degree_down_high, bytes_10_hex, byte_scan_speed_low, byte_scan_speed_high, str_checksum,
+             byte_tilt_degree_down_high, bytes_10_hex, byte_scan_speed_pan, byte_scan_speed_tilt, str_checksum,
              byte_14])
 
     @staticmethod
