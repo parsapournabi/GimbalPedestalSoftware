@@ -1,4 +1,3 @@
-import random
 import traceback
 
 from src.gui.mainGUI import Ui_MainWindow
@@ -141,7 +140,7 @@ class Main:
         self.ui.btnRefrence.clicked.connect(self.go_to_reference)
         self.ui.btnSetLimit.clicked.connect(self.assign_limitation)
         self.ui.btnScan.clicked.connect(self.scan_mode)
-        # self.ui.btnScanStop.clicked.connect(self.scan_mode_stop)
+        self.ui.btnScanStop.clicked.connect(self.scan_mode_stop)
         self.ui.btnSettingCustomSend_1.clicked.connect(lambda: self.send_numbers(0))
         self.ui.btnSettingCustomSend_2.clicked.connect(lambda: self.send_numbers(1))
         self.ui.btnSettingCustomSend_3.clicked.connect(lambda: self.send_numbers(2))
@@ -887,7 +886,8 @@ class Main:
                     pan_dir_left=1 if int(float(self.ui.txtScanPANLow.text()) * 100) >= 0 else 0,
                     tilt_dir_up=1 if int(float(self.ui.txtScanTiltHigh.text()) * 100) >= 0 else 0,
                     tilt_dir_down=1 if int(float(self.ui.txtScanTiltLow.text()) * 100) >= 0 else 0,
-                    scan_speed=ceil(float(self.ui.txtScanSpeed.text()) * 100))
+                    scan_speed_pan=int(float(self.ui.txtScanSpeed.text())),
+                    scan_speed_tilt=int(float(self.ui.txtScanSpeedTilt.text())))
                 self.tx_label(hex_str)
                 print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
             elif self.server.connected:
@@ -902,7 +902,48 @@ class Main:
                     pan_dir_left=1 if int(float(self.ui.txtScanPANLow.text()) * 100) >= 0 else 0,
                     tilt_dir_up=1 if int(float(self.ui.txtScanTiltHigh.text()) * 100) >= 0 else 0,
                     tilt_dir_down=1 if int(float(self.ui.txtScanTiltLow.text()) * 100) >= 0 else 0,
-                    scan_speed=ceil(float(self.ui.txtScanSpeed.text()) * 100))
+                    scan_speed_pan=int(float(self.ui.txtScanSpeed.text())),
+                    scan_speed_tilt=int(float(self.ui.txtScanSpeedTilt.text())))
+                self.tx_label(hex_str)
+                print('Writing data', self.server.client_connected.send(bytes.fromhex(hex_str)))
+
+            sleep(0.001)
+        except Exception as ex:
+            print(f"Exception at keypad_up {ex}")
+            traceback.print_exc()
+
+    def scan_mode_stop(self):
+        try:
+            if self.sp.connected:
+                hex_str = self.sp.parse_sending_scan_mode(
+                    pan_degree_right=ceil(abs(float(self.ui.txtScanPANHigh.text()) * 100)),
+                    pan_degree_left=ceil(abs(float(self.ui.txtScanPANLow.text()) * 100)),
+                    tilt_degree_up=ceil(abs(float(self.ui.txtScanTiltHigh.text()) * 100)),
+                    tilt_degree_down=ceil(abs(float(self.ui.txtScanTiltLow.text()) * 100)),
+                    pan_scan_on=0,
+                    tilt_scan_on=0,
+                    pan_dir_right=1 if int(float(self.ui.txtScanPANHigh.text()) * 100) >= 0 else 0,
+                    pan_dir_left=1 if int(float(self.ui.txtScanPANLow.text()) * 100) >= 0 else 0,
+                    tilt_dir_up=1 if int(float(self.ui.txtScanTiltHigh.text()) * 100) >= 0 else 0,
+                    tilt_dir_down=1 if int(float(self.ui.txtScanTiltLow.text()) * 100) >= 0 else 0,
+                    scan_speed_pan=int(float(self.ui.txtScanSpeed.text())),
+                    scan_speed_tilt=int(float(self.ui.txtScanSpeedTilt.text())))
+                self.tx_label(hex_str)
+                print('Writing data', self.sp.serial.write(bytes.fromhex(hex_str)))
+            elif self.server.connected:
+                hex_str = self.server.parse_sending_scan_mode(
+                    pan_degree_right=ceil(abs(float(self.ui.txtScanPANHigh.text()) * 100)),
+                    pan_degree_left=ceil(abs(float(self.ui.txtScanPANLow.text()) * 100)),
+                    tilt_degree_up=ceil(abs(float(self.ui.txtScanTiltHigh.text()) * 100)),
+                    tilt_degree_down=ceil(abs(float(self.ui.txtScanTiltLow.text()) * 100)),
+                    pan_scan_on=0,
+                    tilt_scan_on=0,
+                    pan_dir_right=1 if int(float(self.ui.txtScanPANHigh.text()) * 100) >= 0 else 0,
+                    pan_dir_left=1 if int(float(self.ui.txtScanPANLow.text()) * 100) >= 0 else 0,
+                    tilt_dir_up=1 if int(float(self.ui.txtScanTiltHigh.text()) * 100) >= 0 else 0,
+                    tilt_dir_down=1 if int(float(self.ui.txtScanTiltLow.text()) * 100) >= 0 else 0,
+                    scan_speed_pan=int(float(self.ui.txtScanSpeed.text())),
+                    scan_speed_tilt=int(float(self.ui.txtScanSpeedTilt.text())))
                 self.tx_label(hex_str)
                 print('Writing data', self.server.client_connected.send(bytes.fromhex(hex_str)))
 
